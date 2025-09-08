@@ -11,7 +11,78 @@
     "--device=all",
     "--socket=wayland"
   ],
+  "cleanup": [
+        "/include",
+        "/lib/pkgconfig",
+        "/man",
+        "/share/doc",
+        "/share/gtk-doc",
+        "/share/man",
+        "/share/pkgconfig",
+        "*.la",
+        "*.a"
+  ],
   "modules": [
+    {
+      "name": "fuse",
+      "builddir": true,
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://github.com/libfuse/libfuse",
+          "tag": "fuse-2.9.9"
+        },
+        {
+          "type": "script",
+          "commands": [
+            "autoreconf -f -i --install --symlink"
+          ]
+        }
+      ],
+      "config-opts": [
+        "-enable-lib",
+        "-enable-util",
+        "-enable-example",
+        "-disable-static"
+      ]
+    },
+    {
+      "name": "ntfs3g",
+      "builddir": true,
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://github.com/tuxera/ntfs-3g",
+          "tag": "2022.10.3"
+        }
+      ],
+      "config-opts": [
+        "-disable-static",
+        "-with-pic",
+        "-disable-ldconfig",
+        "-with-fuse=external",
+        "-enable-posix-acls",
+        "-enable-extras",
+        "-enable-crypto",
+        "-enable-quarantined"
+      ]
+    },
+    {
+      "name": "winlib",
+      "builddir": true,
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://wimlib.net/downloads/wimlib-1.14.4.tar.gz",
+          "sha256": "3633db2b6c8b255eb86d3bf3df3059796bd1f08e50b8c9728c7eb66662e51300"
+        }
+      ],
+      "config-opts": [
+        "-disable-static",
+        "-with-ntfs-3g",
+        "-with-fuse"
+      ]
+    },
     {
       "name": "win2g0",
       "builddir": true,
