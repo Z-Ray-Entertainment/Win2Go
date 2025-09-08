@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+    <id>de.z_ray.Win2Go</id>
+    <name>Win2Go</name>
+    <developer id="de.z_ray">
+        <name>Z-Ray Entertainment</name>
+    </developer>
+    <launchable type="desktop-id">de.z_ray.Win2Go.desktop</launchable>
+    <branding>
+        <color type="primary" scheme_preference="light">#241f31</color>
+        <color type="primary" scheme_preference="dark">#613583</color>
+    </branding>
+    <summary>Make Windows portable</summary>
+    <description>
+        <p>
+            This is a graphical tool to create portable Windows instalaltions on USB devices.
+        </p>
+        <p xml:lang="de">
+            Eine grafische Oberfläche um portable Windows Installationen auf USB Geräte zu erstelen.
+        </p>
+    </description>
+
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>MIT</project_license>
+    <content_rating type="oars-1.1"/>
+    <translation type="gettext">win2go</translation>
+
+    <screenshots>
+        
+    </screenshots>
+
+    <url type="homepage">https://codeberg.org/ZRayEntertainment/win2go</url>
+    <url type="vcs-browser">https://codeberg.org/ZRayEntertainment/win2go</url>
+    <url type="help">https://codeberg.org/ZRayEntertainment/win2go/issues</url>
+
+    <releases>
+        <release version="25.9" date="2025-09-03">
+            <description>
+                <ul>
+                    <li>Initial release</li>
+                </ul>
+            </description>
+        </release>
+    </releases>
+</component>

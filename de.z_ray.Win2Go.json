@@ -1,0 +1,27 @@
+{
+  "app-id": "de.z_ray.Win2Go",
+  "runtime": "org.gnome.Platform",
+  "runtime-version": "48",
+  "sdk": "org.gnome.Sdk",
+  "command": "win2go",
+  "finish-args": [
+    "--share=network",
+    "--share=ipc",
+    "--socket=fallback-x11",
+    "--device=all",
+    "--socket=wayland"
+  ],
+  "modules": [
+    {
+      "name": "win2g0",
+      "builddir": true,
+      "buildsystem": "meson",
+      "sources": [
+        {
+          "type": "dir",
+          "path": "."
+        }
+      ]
+    }
+  ]
+}
