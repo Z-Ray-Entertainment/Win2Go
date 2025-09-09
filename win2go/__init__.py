@@ -23,6 +23,5 @@ def run():
     print("Works!")
     sys.exit(Win2Go(application_id=APP_ID).run(sys.argv))
 
-
 if __name__ == '__main__':
     run()

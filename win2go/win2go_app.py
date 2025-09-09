@@ -10,6 +10,6 @@ from gi.repository import Adw, Gio, GLib, Gtk
 class Win2Go(Adw.Application):
     win: MainWindow
 
-    def on_activate(self, app):
-        self.win = MainWindow(application=app)
+    def do_activate(self):
+        self.win = MainWindow(application=self)
         self.win.present()
