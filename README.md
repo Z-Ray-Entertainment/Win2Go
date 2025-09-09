@@ -1,12 +1,14 @@
 # Win2GO
 
-Flatpak application to create portable Windows instalaltions on USB drives.
-
-## Requires
-- python3
-- GTK4 / Libadwaita
-- wimtools
+Flatpak application to create portable Windows installations on USB drives.
 
 ## Development requirements
-- Gnome Builder
-- gettext-tools
+- gettext-tools (optional extracting pot-file)
+- wimtools
+- gcc
+- python3-devel
+- cmake
+- gobject-introspection-devel
+
+## Test requirements
+- Gnome Builder (Test build of flatpak)
