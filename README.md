@@ -13,3 +13,6 @@ Flatpak application to create portable Windows installations on USB drives.
 
 ## Test requirements
 - Gnome Builder (Test build of flatpak)
+
+## Special Thanks to
+- [jxctn0](https://github.com/jxctn0/win2go) without this script I didn't knew how to pull this off
