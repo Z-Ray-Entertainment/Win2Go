@@ -19,9 +19,5 @@ from win2go.win2go_app import Win2Go
 import gettext
 gettext.install('win2go', LOCALE_DIR)
 
-def run():
-    print("Works!")
-    sys.exit(Win2Go(application_id=APP_ID).run(sys.argv))
-
 if __name__ == '__main__':
-    run()
+    sys.exit(Win2Go(application_id=APP_ID).run(sys.argv))
