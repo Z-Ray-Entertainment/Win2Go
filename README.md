@@ -9,6 +9,7 @@ Flatpak application to create portable Windows installations on USB drives.
 - python3-devel
 - cmake
 - gobject-introspection-devel
+- typelib-1_0-Adw-1
 
 ## Test requirements
 - Gnome Builder (Test build of flatpak)

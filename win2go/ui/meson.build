@@ -7,7 +7,8 @@ blueprints = custom_target('blueprints',
 )
 
 user_interface_sources = files([
-    'main_window.py'
+    'main_window.py',
+    '__init__.py'
 ])
 
 install_data(user_interface_sources, install_dir: moduledir)
