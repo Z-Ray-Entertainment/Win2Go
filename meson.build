@@ -1,11 +1,12 @@
 project('win2go',
-  version: '25.9',
+  version: '1.0',
   meson_version: '>= 0.62.0',
   default_options: ['warning_level=2', 'werror=false'],
 )
 
 gnome = import('gnome')
 i18n = import('i18n')
+i18n.gettext('win2go', preset: 'glib')
 
 appstream_file = 'de.z_ray.Win2Go.metainfo.xml'
 install_data(appstream_file, install_dir: join_paths(get_option('datadir'), 'metainfo'))
