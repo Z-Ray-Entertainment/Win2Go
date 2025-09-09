@@ -32,7 +32,9 @@ configure_file(
 
 win2go_sources = files([
     'winlib.py',
-    'win2go_app.py'
+    'win2go_app.py',
+    'usb.py',
+    'sysutils.py'
 ])
 
 subdir('ui')
