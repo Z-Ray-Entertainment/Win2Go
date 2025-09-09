@@ -33,9 +33,14 @@
           "tag": "fuse-2.9.9"
         },
         {
+          "type": "patch",
+          "path": "closefrom.patch"
+        },
+        {
           "type": "script",
           "commands": [
-            "autoreconf -f -i --install --symlink"
+            "touch config.rpath",
+            "autoreconf -fi"
           ]
         }
       ],
