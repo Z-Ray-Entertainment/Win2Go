@@ -1,8 +1,14 @@
-// Gtk Declaration
 using Gtk 4.0;
 
-// Import Statement
-using Adw 1;
+template $Win2GoMainWindow: ApplicationWindow {
+  default-width: 600;
+  default-height: 300;
+  title: "Win2Go";
 
-// Object
-Window my_window {}
+  [titlebar]
+  HeaderBar {}
+
+  Label {
+    label: bind template.main_text;
+  }
+}
