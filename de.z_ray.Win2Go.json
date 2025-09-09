@@ -37,6 +37,10 @@
           "path": "closefrom.patch"
         },
         {
+          "type": "patch",
+          "path": "mount.patch"
+        },
+        {
           "type": "script",
           "commands": [
             "touch config.rpath",
