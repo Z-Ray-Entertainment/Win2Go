@@ -1,14 +1,30 @@
 using Gtk 4.0;
 
 template $Win2GoMainWindow: ApplicationWindow {
-  default-width: 600;
-  default-height: 300;
-  title: "Win2Go";
+    default-width: 600;
+    default-height: 300;
+    title: "Win2Go";
 
-  [titlebar]
-  HeaderBar {}
+    [titlebar]
+    HeaderBar {}
 
-  Label {
-    label: "Hello?";
-  }
+    Box {
+        orientation: vertical;
+        halign: center;
+        valign: center;
+
+        Label {
+            label: _("Select device");
+            margin-top: 24;
+            margin-bottom: 24;
+
+            styles [
+            "heading"
+            ]
+        }
+
+        DropDown advanced_drop_down {
+            enable-search: true;
+        }
+    }
 }
