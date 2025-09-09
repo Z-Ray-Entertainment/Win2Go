@@ -1,14 +1,6 @@
-blueprints = custom_target('blueprints',
-  input: files(
-    'main_window.blp'
-  ),
-  output: '.',
-  command: [find_program('blueprint-compiler'), 'batch-compile', '--minify', '@OUTPUT@', '@CURRENT_SOURCE_DIR@', '@INPUT@'],
-)
-
+ui_dir = join_paths(moduledir, 'ui')
 user_interface_sources = files([
-    'main_window.py',
-    '__init__.py'
+    'main_window.py'
 ])
 
-install_data(user_interface_sources, install_dir: moduledir)
+install_data(user_interface_sources, install_dir: ui_dir)
