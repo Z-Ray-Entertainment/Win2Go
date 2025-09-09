@@ -33,7 +33,7 @@ configure_file(
 win2go_sources = files([
     'winlib.py',
     'win2go_app.py',
-    'usb.py',
+    'block_device.py',
     'sysutils.py'
 ])
 
