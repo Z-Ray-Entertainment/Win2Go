@@ -29,3 +29,11 @@ configure_file(
   install_dir: moduledir,
   install_mode: 'r-xr--r--',
 )
+
+win2go_sources = files([
+    'winlib.py'
+])
+
+subdir('ui')
+
+install_data(win2go_sources, install_dir: moduledir)
