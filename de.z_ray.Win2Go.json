@@ -40,6 +40,18 @@
       ]
     },
     {
+      "name": "blueprint",
+      "builddir": true,
+      "buildsystem": "meson",
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://gitlab.gnome.org/GNOME/blueprint-compiler.git",
+          "tag": "0.18.0"
+        }
+      ]
+    },
+    {
       "name": "win2g0",
       "builddir": true,
       "buildsystem": "meson",
