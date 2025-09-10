@@ -4,5 +4,5 @@ Exec=win2go
 Type=Application
 Icon=de.z_ray.Win2Go
 Categories=Utility;
-Keywords=iso;image;usb;
+Keywords=iso;image;usb;windows
 Comment=A graphical interface to create portable Windows installs
