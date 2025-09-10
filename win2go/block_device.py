@@ -14,7 +14,6 @@ def find_block_devices():
         device_model: str = device["model"]
 
         if blacklist.search(device_name) is None:
-            print(device)
             usb_device: BlockDevice = BlockDevice(device_name.strip(), device_size.strip(), device_model.strip())
             found_devices.append(usb_device)
     return found_devices

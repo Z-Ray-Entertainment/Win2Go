@@ -11,7 +11,7 @@ template $Win2GoMainWindow: ApplicationWindow {
     Box {
         orientation: vertical;
         halign: center;
-        valign: center;
+        valign: start;
 
         Label {
             label: _("Select device");
@@ -23,7 +23,7 @@ template $Win2GoMainWindow: ApplicationWindow {
             ]
         }
 
-        DropDown advanced_drop_down {
+        DropDown device_drop_down {
             enable-search: true;
         }
     }
