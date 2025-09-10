@@ -32,11 +32,10 @@ configure_file(
 
 win2go_sources = files([
     'winlib.py',
-    'win2go_app.py',
-    'block_device.py',
-    'sysutils.py'
+    'win2go_app.py'
 ])
 
 subdir('ui')
+subdir('utils')
 
 install_data(win2go_sources, install_dir: moduledir)

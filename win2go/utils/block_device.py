@@ -1,4 +1,4 @@
-from win2go.sysutils import lsblk
+from win2go.utils.sysutils import lsblk
 
 
 def find_block_devices():

@@ -1,13 +1,13 @@
 import gi
 
-from win2go.block_device import find_block_devices, BlockDevice
+from win2go.utils.block_device import find_block_devices, BlockDevice
 from win2go.ui.block_device_item import get_list_store_expression, build_block_device_model
 from win2go.ui.windows_edition_item import get_edition_list_store_expression, build_windows_edition_model
 from win2go.winlib import get_windows_edition
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
-from gi.repository import Gtk, Adw, Gio, GObject
+from gi.repository import Gtk, Gio
 from gi.repository.Gtk import DropDown, Button, FileFilter
 
 @Gtk.Template(resource_path="/de/z_ray/win2go/blp/main_window.ui")
