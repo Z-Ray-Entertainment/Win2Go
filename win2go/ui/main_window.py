@@ -43,7 +43,6 @@ class MainWindow(Gtk.ApplicationWindow):
         self.image_file = file_dialog.open_finish(result)
         self.open_iso.set_label(get_file_name(self.image_file))
         self.windows_edition_drop_down.set_visible(True)
-        print(f"Selected Image: {get_file_name(self.image_file)}")
 
     def on_selected_item(self, _drop_down, _selected_item):
             selected_item = self.device_drop_down.get_selected_item()
