@@ -10,12 +10,14 @@ Portable SSD highly recommended.
 
 ## Development requirements
 - gettext-tools (optional extracting pot-file)
-- wintools
+- wimtools
 - gcc
 - python3-devel
 - cmake
 - gobject-introspection-devel
 - typelib-1_0-Adw-1
+
+`sudo zypper in gettext-tools wimtools gcc python3-devel cmake gobject-introspection-devel typelib-1_0-Adw-1`
 
 ## Test requirements
 - Gnome Builder (Test build of flatpak)
