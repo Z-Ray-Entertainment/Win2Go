@@ -32,7 +32,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
         self.device_drop_down.set_expression(get_list_store_expression())
         self.device_drop_down.set_model(build_block_device_model(block_devices_found))
-        self.device_drop_down.connect("notify::selected-item", self.on_selected_item)
+        self.device_drop_down.connect("notify::selected-item", self.on_block_device_selected_item)
 
         self.open_iso.connect("clicked", lambda *_: self.open_image())
 
@@ -49,9 +49,9 @@ class MainWindow(Gtk.ApplicationWindow):
         self.windows_edition_drop_down.set_model(build_windows_edition_model(windows_editions_found))
         self.windows_edition_drop_down.connect("notify::selected-item", self.on_selected_item)
 
-    def on_selected_item(self, _drop_down, _selected_item):
-            selected_item = self.device_drop_down.get_selected_item()
-            self.block_device = BlockDevice(selected_item.device_name, selected_item.device_size, selected_item.device_model, selected_item.device_transport)
+    def on_block_device_selected_item(self, _drop_down, _selected_item):
+        selected_item = _drop_down.get_selected_item()
+        self.block_device = BlockDevice(selected_item.device_name, selected_item.device_size, selected_item.device_model)
 
     def on_edition_selected(self, _drop_down, _selected_item):
         pass

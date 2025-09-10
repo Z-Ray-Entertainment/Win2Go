@@ -33,13 +33,6 @@ class BlockDeviceItem(GObject.Object):
         flags=GObject.ParamFlags.READWRITE,
         default="",
     )
-    device_transport = GObject.Property(
-        type=str,
-        nick="Model",
-        blurb="Model",
-        flags=GObject.ParamFlags.READWRITE,
-        default="",
-    )
 
 
 def build_block_device_model(found_block_devices):
@@ -63,7 +56,6 @@ def _build_block_device_additions(block_devices):
                                      value=display_name,
                                      device_name=bd.device_name,
                                      device_size=bd.device_size,
-                                     device_model=bd.device_model,
-                                     device_transport=bd.device_transport)
+                                     device_model=bd.device_model)
         block_device_additions.append(block_item)
     return block_device_additions
