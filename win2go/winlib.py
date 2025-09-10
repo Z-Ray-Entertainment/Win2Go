@@ -9,8 +9,8 @@ def get_windows_edition(iso_file):
 
 class WindowsEdition:
     edition_name: str
-    image_index: int
+    edition_index: int
 
-    def __init__(self, edition_name, image_index):
+    def __init__(self, edition_name, edition_index):
         self.edition_name = edition_name
-        self.image_index = image_index
+        self.edition_index = edition_index

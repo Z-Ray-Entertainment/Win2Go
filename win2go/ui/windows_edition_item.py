@@ -6,11 +6,11 @@ from gi.repository import Gtk, GObject, Gio
 class WindowsEditionItem(GObject.GObject):
     key = GObject.Property(type=str, flags=GObject.ParamFlags.READWRITE, default="")
     value = GObject.Property(
-        type=int,
+        type=str,
         nick="Value",
         blurb="Value",
         flags=GObject.ParamFlags.READWRITE,
-        default=0,
+        default="",
     )
     edition_name = GObject.Property(
         type=str,
@@ -18,6 +18,13 @@ class WindowsEditionItem(GObject.GObject):
         blurb="Name",
         flags=GObject.ParamFlags.READWRITE,
         default="",
+    )
+    edition_index = GObject.Property(
+        type=int,
+        nick="Name",
+        blurb="Name",
+        flags=GObject.ParamFlags.READWRITE,
+        default=0,
     )
 
 
@@ -38,8 +45,9 @@ def _build_windows_edition_additions(found_editions):
     block_device_additions = []
     for edition in found_editions:
         block_item = WindowsEditionItem(key=edition.edition_name,
-                                     value=edition.image_index,
-                                     edition_name=edition.edition_name
+                                        value=edition.edition_name,
+                                        edition_name=edition.edition_name,
+                                        edition_index=edition.edition_index
                                     )
         block_device_additions.append(block_item)
     return block_device_additions
