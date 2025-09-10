@@ -25,3 +25,11 @@ class BlockDevice:
         self.device_size = device_size
         self.device_model = device_model
         self.device_transport = device_transport
+
+    def print_device(self):
+        print("{" +
+              self.device_name + ", " +
+              self.device_size + ", " +
+              self.device_model + ", " +
+              self.device_transport +
+              "}")
