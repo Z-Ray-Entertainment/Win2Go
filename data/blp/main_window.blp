@@ -2,8 +2,8 @@ using Gtk 4.0;
 using Adw 1;
 
 template $Win2GoMainWindow: ApplicationWindow {
-    default-width: 500;
-    default-height: 400;
+    default-width: 600;
+    default-height: 600;
     title: "Win2Go";
 
     [titlebar]
@@ -55,6 +55,7 @@ template $Win2GoMainWindow: ApplicationWindow {
           hexpand: true;
           title: _("Device");
           description: _("Choose the device Windows should be installed to");
+          icon-name: "usb-device";
 
           child: Box{
             halign: center;
@@ -71,13 +72,23 @@ template $Win2GoMainWindow: ApplicationWindow {
           hexpand: true;
           title: _("Edition");
           description: _("Select Windows Edition");
+          icon-name: "windows-logo";
 
           child: Box{
             halign: center;
             valign: center;
+            orientation: vertical;
+            spacing: 10;
+
+            Button {
+              label: _("Choose ISO");
+              tooltip-text: _("Choose Windows ISO-File");
+              icon-name: "folder-open-symbolic";
+            }
 
             DropDown windows_edition_drop_down {
               enable-search: true;
+              visible: false;
             }
           };
         }
@@ -87,6 +98,7 @@ template $Win2GoMainWindow: ApplicationWindow {
           hexpand: true;
           title: _("User");
           description: _("Set user details");
+          icon-name: "people-symbolic";
 
           child: ListBox{
 
@@ -110,6 +122,7 @@ template $Win2GoMainWindow: ApplicationWindow {
           hexpand: true;
           title: _("Advanced Options");
           description: _("Set advanced options (Optional)");
+          icon-name: "wrench-wide-symbolic";
 
           child: ListBox{
 

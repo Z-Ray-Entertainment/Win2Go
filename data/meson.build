@@ -12,6 +12,13 @@ install_data(
   install_dir: join_paths(get_option('datadir'), symbolic_dir)
 )
 
+custom_icons = join_paths('icons')
+install_data(
+  join_paths(custom_icons, 'windows-logo.svg'),
+  join_paths(custom_icons, 'usb-device.svg'),
+  install_dir: join_paths(get_option('datadir'), custom_icons)
+)
+
 blueprints = custom_target('blueprints',
   input: files(
     'blp/main_window.blp'

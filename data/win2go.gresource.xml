@@ -3,4 +3,9 @@
   <gresource prefix="/de/z_ray/win2go">
     <file preprocess="xml-stripblanks">blp/main_window.ui</file>
   </gresource>
+  <gresource prefix="/de/z_ray/win2go/icons/scalable">
+    <file alias="windows-logo.svg">icons/windows-logo.svg</file>
+    <file alias="usb-device.svg">icons/usb-device.svg</file>
+  </gresource>
+
 </gresources>
