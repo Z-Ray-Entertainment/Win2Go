@@ -1,6 +1,12 @@
 # Win2GO
 
-Flatpak application to create portable Windows installations on USB drives.
+Flatpak application to create portable Windows installations on USB devices.
+
+This tool is not used to create bootable Windows install media but rather to create a fully functional, portable, persistent installation of the entire operating system to a USB device.
+
+Linux users call this "Live Version" but persistent instead of in-memory.
+
+Portable SSD highly recommended.
 
 ## Development requirements
 - gettext-tools (optional extracting pot-file)
