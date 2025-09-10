@@ -4,7 +4,7 @@ Flatpak application to create portable Windows installations on USB drives.
 
 ## Development requirements
 - gettext-tools (optional extracting pot-file)
-- wimtools
+- wintools
 - gcc
 - python3-devel
 - cmake
