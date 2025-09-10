@@ -2,6 +2,13 @@ using Gtk 4.0;
 using Adw 1;
 
 template $Win2GoMainWindow: ApplicationWindow {
+    FileFilter file_filter_image {
+      mime-types [
+        "application/x-cd-image",
+        "application/x-iso9660-image"
+      ]
+    }
+
     default-width: 600;
     default-height: 600;
     title: "Win2Go";
@@ -80,10 +87,13 @@ template $Win2GoMainWindow: ApplicationWindow {
             orientation: vertical;
             spacing: 10;
 
-            Button {
+            Button open_iso {
               label: _("Choose ISO");
               tooltip-text: _("Choose Windows ISO-File");
               icon-name: "folder-open-symbolic";
+              styles [
+                "pill"
+              ]
             }
 
             DropDown windows_edition_drop_down {

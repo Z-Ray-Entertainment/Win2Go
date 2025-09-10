@@ -40,6 +40,16 @@ class MainWindow(Gtk.ApplicationWindow):
         self.device_drop_down.set_model(block_device_model)
         self.device_drop_down.connect("notify::selected-item", self.on_selected_item)
 
+        self.open_iso.connect("clicked", lambda *_: self.open_image())
+
+    def open_image(self):
+        Gtk.FileDialog(default_filter=self.file_filter_image).open(self, None, self.on_image_opened)
+
+    def on_image_opened(self, file_dialog, result):
+        self.image_file = file_dialog.open_finish(result)
+        self.open_iso.set_label(get_file_name(self.image_file))
+        print(f"Selected Image: {get_file_name(self.image_file)}")
+
     def on_selected_item(self, _drop_down, _selected_item):
             selected_item = self.device_drop_down.get_selected_item()
             if selected_item:
@@ -78,4 +88,6 @@ class BlockDeviceItem(GObject.Object):
         blurb="Model",
         flags=GObject.ParamFlags.READWRITE,
         default="",
-    )
+def get_file_name(file):
+    info = file.query_info("standard::name", Gio.FileQueryInfoFlags.NONE, None)
+    return info.get_name()    )
