@@ -1,6 +1,7 @@
 import gi
 
 from win2go.block_device import find_block_devices, BlockDevice
+from win2go.ui.block_device_item import get_list_store_expression, build_block_device_model
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
@@ -26,14 +27,8 @@ class MainWindow(Gtk.ApplicationWindow):
         block_devices_found = find_block_devices()
         if len(block_devices_found) > 0:
             self.block_device = block_devices_found[0]
-        block_device_additions = build_block_device_additions(block_devices_found)
-        block_device_model = Gio.ListStore(item_type=BlockDeviceItem)
-        block_device_model.splice(0, 0, block_device_additions)
-        list_store_expression = Gtk.PropertyExpression.new(
-            BlockDeviceItem,
-            None,
-            "value",
-        )
+        list_store_expression = get_list_store_expression()
+        block_device_model = build_block_device_model(block_devices_found)
 
         self.device_drop_down.set_expression(list_store_expression)
         self.device_drop_down.set_model(block_device_model)
@@ -70,57 +65,6 @@ class WindowsEditionItem(GObject.GObject):
         flags=GObject.ParamFlags.READWRITE,
         default="",
     )
-
-class BlockDeviceItem(GObject.Object):
-    key = GObject.Property(type=str, flags=GObject.ParamFlags.READWRITE, default="")
-    value = GObject.Property(
-        type=str,
-        nick="Value",
-        blurb="Value",
-        flags=GObject.ParamFlags.READWRITE,
-        default="",
-    )
-    device_name = GObject.Property(
-        type=str,
-        nick="Name",
-        blurb="Name",
-        flags=GObject.ParamFlags.READWRITE,
-        default="",
-    )
-    device_size = GObject.Property(
-        type=str,
-        nick="Size",
-        blurb="Size",
-        flags=GObject.ParamFlags.READWRITE,
-        default="",
-    )
-    device_model = GObject.Property(
-        type=str,
-        nick="Model",
-        blurb="Model",
-        flags=GObject.ParamFlags.READWRITE,
-        default="",
-    )
-    device_transport = GObject.Property(
-        type=str,
-        nick="Model",
-        blurb="Model",
-        flags=GObject.ParamFlags.READWRITE,
-        default="",
-    )
-
-def build_block_device_additions(block_devices):
-    block_device_additions = []
-    for bd in block_devices:
-        display_name = bd.device_model + " (" + bd.device_name + ", " + bd.device_size + ")"
-        block_item = BlockDeviceItem(key=bd.device_name,
-                                     value=display_name,
-                                     device_name=bd.device_name,
-                                     device_size=bd.device_size,
-                                     device_model=bd.device_model,
-                                     device_transport=bd.device_transport)
-        block_device_additions.append(block_item)
-    return block_device_additions
 
 def get_file_name(file):
     info = file.query_info("standard::name", Gio.FileQueryInfoFlags.NONE, None)
