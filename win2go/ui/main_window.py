@@ -1,6 +1,6 @@
 import gi
 
-from win2go.block_device import find_block_devices
+from win2go.block_device import find_block_devices, BlockDevice
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
@@ -11,22 +11,15 @@ from gi.repository.Gtk import DropDown
 class MainWindow(Gtk.ApplicationWindow):
     __gtype_name__ = "Win2GoMainWindow"
     device_drop_down: DropDown = Gtk.Template.Child()
-    block_devices: dict
+    block_device: BlockDevice
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.block_devices = find_block_devices()
 
-        block_device_additions = []
-        for bd in self.block_devices:
-            display_name = bd.device_model + " (" + bd.device_name + ", " + bd.device_size + ")"
-            block_item = BlockDeviceItem(key=bd.device_name,
-                                         value=display_name,
-                                         device_name=bd.device_name,
-                                         device_size=bd.device_size,
-                                         device_model=bd.device_model)
-            block_device_additions.append(block_item)
-
+        block_devices_found = find_block_devices()
+        if len(block_devices_found) > 0:
+            self.block_device = block_devices_found[0]
+        block_device_additions = build_block_device_additions(block_devices_found)
         block_device_model = Gio.ListStore(item_type=BlockDeviceItem)
         block_device_model.splice(0, 0, block_device_additions)
 
@@ -52,12 +45,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
     def on_selected_item(self, _drop_down, _selected_item):
             selected_item = self.device_drop_down.get_selected_item()
-            if selected_item:
-                print(selected_item.key,
-                      selected_item.value,
-                      selected_item.device_name,
-                      selected_item.device_size,
-                      selected_item.device_model)
+            self.block_device = BlockDevice(selected_item.device_name, selected_item.device_size, selected_item.device_model, selected_item.device_transport)
 
 class BlockDeviceItem(GObject.Object):
     key = GObject.Property(type=str, flags=GObject.ParamFlags.READWRITE, default="")
