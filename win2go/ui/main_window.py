@@ -27,11 +27,9 @@ class MainWindow(Gtk.ApplicationWindow):
         block_devices_found = find_block_devices()
         if len(block_devices_found) > 0:
             self.block_device = block_devices_found[0]
-        list_store_expression = get_list_store_expression()
-        block_device_model = build_block_device_model(block_devices_found)
 
-        self.device_drop_down.set_expression(list_store_expression)
-        self.device_drop_down.set_model(block_device_model)
+        self.device_drop_down.set_expression(get_list_store_expression())
+        self.device_drop_down.set_model(build_block_device_model(block_devices_found))
         self.device_drop_down.connect("notify::selected-item", self.on_selected_item)
 
         self.open_iso.connect("clicked", lambda *_: self.open_image())
