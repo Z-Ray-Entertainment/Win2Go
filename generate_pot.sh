@@ -1,1 +1,0 @@
-xgettext -d base -o data/po/facetracker.pot src/*.py
