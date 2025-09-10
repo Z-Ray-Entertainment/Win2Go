@@ -2,6 +2,8 @@ import gi
 
 from win2go.block_device import find_block_devices, BlockDevice
 from win2go.ui.block_device_item import get_list_store_expression, build_block_device_model
+from win2go.ui.windows_edition_item import get_edition_list_store_expression, build_windows_edition_model
+from win2go.winlib import get_windows_edition
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
@@ -40,28 +42,19 @@ class MainWindow(Gtk.ApplicationWindow):
     def on_image_opened(self, file_dialog, result):
         self.image_file = file_dialog.open_finish(result)
         self.open_iso.set_label(get_file_name(self.image_file))
+
+        windows_editions_found = get_windows_edition(self.image_file)
         self.windows_edition_drop_down.set_visible(True)
+        self.windows_edition_drop_down.set_expression(get_edition_list_store_expression())
+        self.windows_edition_drop_down.set_model(build_windows_edition_model(windows_editions_found))
+        self.windows_edition_drop_down.connect("notify::selected-item", self.on_selected_item)
 
     def on_selected_item(self, _drop_down, _selected_item):
             selected_item = self.device_drop_down.get_selected_item()
             self.block_device = BlockDevice(selected_item.device_name, selected_item.device_size, selected_item.device_model, selected_item.device_transport)
 
-class WindowsEditionItem(GObject.GObject):
-    key = GObject.Property(type=str, flags=GObject.ParamFlags.READWRITE, default="")
-    value = GObject.Property(
-        type=int,
-        nick="Value",
-        blurb="Value",
-        flags=GObject.ParamFlags.READWRITE,
-        default=0,
-    )
-    edition_name = GObject.Property(
-        type=str,
-        nick="Name",
-        blurb="Name",
-        flags=GObject.ParamFlags.READWRITE,
-        default="",
-    )
+    def on_edition_selected(self, _drop_down, _selected_item):
+        pass
 
 def get_file_name(file):
     info = file.query_info("standard::name", Gio.FileQueryInfoFlags.NONE, None)
