@@ -39,35 +39,88 @@ template $Win2GoMainWindow: ApplicationWindow {
           allow-scroll-wheel: true;
           allow-mouse-drag: true;
           allow-long-swipes: true;
+          margin-start: 60;
+          margin-end: 60;
 
         Adw.StatusPage {
           vexpand: true;
           hexpand: true;
           title: "Win2Go";
-            description: _("Install Windows on USB Devices");
-            icon-name: "de.z_ray.Win2Go";
+          description: _("Install Windows on USB Devices");
+          icon-name: "de.z_ray.Win2Go";
         }
 
-        Box {
-            vexpand: true;
-            hexpand: true;
-            orientation: vertical;
+        Adw.StatusPage {
+          vexpand: true;
+          hexpand: true;
+          title: _("Device");
+          description: _("Choose the device Windows should be installed to");
+
+          child: Box{
             halign: center;
             valign: center;
 
-            Label {
-                label: _("Select device");
-                margin-top: 24;
-                margin-bottom: 24;
-
-                styles [
-                "heading"
-                ]
-            }
-
             DropDown device_drop_down {
-                enable-search: true;
+              enable-search: true;
             }
+          };
+        }
+
+        Adw.StatusPage {
+          vexpand: true;
+          hexpand: true;
+          title: _("Edition");
+          description: _("Select Windows Edition");
+
+          child: Box{
+            halign: center;
+            valign: center;
+
+            DropDown windows_edition_drop_down {
+              enable-search: true;
+            }
+          };
+        }
+
+        Adw.StatusPage {
+          vexpand: true;
+          hexpand: true;
+          title: _("User");
+          description: _("Set user details");
+
+          child: ListBox{
+
+            Adw.EntryRow windows_user_name {
+              title: _("User Name");
+            }
+
+            Adw.PasswordEntryRow windows_user_pasword {
+              title: _("Password");
+            }
+
+            Adw.SwitchRow {
+              title: _("Administrator");
+              subtitle: _("User should have Administrator Privileges");
+            }
+          };
+        }
+
+        Adw.StatusPage {
+          vexpand: true;
+          hexpand: true;
+          title: _("Advanced Options");
+          description: _("Set advanced options (Optional)");
+
+          child: ListBox{
+
+            Adw.SwitchRow windows_disable_cpu {
+              title: _("Disable CPU check");
+            }
+
+            Adw.SwitchRow windows_disable_tpm {
+              title: _("Disable TMP 2.0 check");
+            }
+          };
         }
       }
 
