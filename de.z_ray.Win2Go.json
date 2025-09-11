@@ -5,7 +5,8 @@
   "sdk": "org.gnome.Sdk",
   "command": "win2go",
   "finish-args": [
-    "--socket=wayland"
+    "--socket=wayland",
+    "--system-talk-name=org.freedesktop.UDisks2"
   ],
   "cleanup": [
         "/include",
