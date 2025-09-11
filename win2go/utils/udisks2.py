@@ -1,10 +1,7 @@
 import os
-from pprint import pprint
 
 import gi
-from gi.overrides.Gio import Gio
 from gi.repository import GLib
-from gi.repository.GioUnix import FileDescriptorBased
 
 gi.require_version('GioUnix', '2.0')
 
