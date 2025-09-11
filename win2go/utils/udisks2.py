@@ -1,3 +1,4 @@
+import os
 from pprint import pprint
 
 import gi
@@ -23,7 +24,14 @@ def is_ntfs_supported() -> bool:
 
 def mount_iso_image(file):
     manager_interface = udisks2_manager['org.freedesktop.UDisks2.Manager']
-    manager_interface.LoopSetup(file.read().get_fd(), []) # Requires an argument ... isn't it supposed to give me the fd?
+    fd = os.open(file.get_path(), os.O_RDONLY)
+    print(fd)
+    manager_interface.LoopSetup(fd, {
+            'offset': None,
+            'size': None,
+            'read-only': True,
+            'no-part-scan': None,
+        }) # TODO: Options as GLib.Variant.
 
 def find_removable_media():
     devices_found = []
