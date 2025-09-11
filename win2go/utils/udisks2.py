@@ -53,9 +53,7 @@ class BlockDevice:
     def get_size_readable(self):
         size_readable = self.device_size
         suffix = 0
-        print(self.device_object)
         while not (size_readable / 1024.) < 1 and suffix < len(size_suffixes):
-            print(size_readable)
             suffix += 1
             size_readable = size_readable / 1024.
 
