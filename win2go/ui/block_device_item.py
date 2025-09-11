@@ -12,10 +12,10 @@ class BlockDeviceItem(GObject.Object):
         flags=GObject.ParamFlags.READWRITE,
         default="",
     )
-    device_name = GObject.Property(
+    device_object = GObject.Property(
         type=str,
-        nick="Name",
-        blurb="Name",
+        nick="Object",
+        blurb="Object",
         flags=GObject.ParamFlags.READWRITE,
         default="",
     )
@@ -51,10 +51,10 @@ def get_list_store_expression():
 def _build_block_device_additions(block_devices):
     block_device_additions = []
     for bd in block_devices:
-        display_name = bd.device_model + " (" + bd.device_name + ", " + bd.device_size + ")"
-        block_item = BlockDeviceItem(key=bd.device_name,
+        display_name = bd.device_model + " (" + bd.get_size_readable() + ")"
+        block_item = BlockDeviceItem(key=bd.device_object,
                                      value=display_name,
-                                     device_name=bd.device_name,
+                                     device_object=bd.device_object,
                                      device_size=bd.device_size,
                                      device_model=bd.device_model)
         block_device_additions.append(block_item)

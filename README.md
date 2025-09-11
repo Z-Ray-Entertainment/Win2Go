@@ -17,8 +17,9 @@ Portable SSD highly recommended.
 - gobject-introspection-devel
 - typelib-1_0-Adw-1
 - cairo-devel
+- dbus-1-devel
 
-`sudo zypper in gettext-tools wimtools gcc python3-devel cmake gobject-introspection-devel typelib-1_0-Adw-1 cairo-devel`
+`sudo zypper in gettext-tools wimtools gcc python3-devel cmake gobject-introspection-devel typelib-1_0-Adw-1 cairo-devel dbus-1-devel`
 
 ## Test requirements
 - Gnome Builder (Test build of flatpak)

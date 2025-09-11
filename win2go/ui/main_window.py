@@ -1,8 +1,8 @@
 import gi
 
-from win2go.utils.block_device import find_block_devices, BlockDevice
 from win2go.ui.block_device_item import get_list_store_expression, build_block_device_model
 from win2go.ui.windows_edition_item import get_edition_list_store_expression, build_windows_edition_model
+from win2go.utils.udisks2 import find_removable_media, BlockDevice
 from win2go.winlib import get_windows_edition, WindowsEdition
 
 gi.require_version("Gtk", "4.0")
@@ -27,7 +27,7 @@ class MainWindow(Gtk.ApplicationWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        block_devices_found = find_block_devices()
+        block_devices_found = find_removable_media()
         if len(block_devices_found) > 0:
             self.block_device = block_devices_found[0]
 
@@ -52,7 +52,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
     def on_block_device_selected_item(self, _drop_down, _selected_item):
         selected_item = _drop_down.get_selected_item()
-        self.block_device = BlockDevice(selected_item.device_name, selected_item.device_size, selected_item.device_model)
+        self.block_device = BlockDevice(selected_item.device_size, selected_item.device_model, selected_item.device_object)
 
     def on_edition_selected(self, _drop_down, _selected_item):
         selected_item = _drop_down.get_selected_item()
