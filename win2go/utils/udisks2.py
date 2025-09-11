@@ -17,6 +17,10 @@ def is_ntfs_supported() -> bool:
     supported_filesystems = manager_properties.Get('org.freedesktop.UDisks2.Manager', 'SupportedFilesystems')
     return 'ntfs' in supported_filesystems
 
+def mount_iso_image(file_path: str):
+    manager_interface = udisks2_manager['org.freedesktop.UDisks2.Manager']
+    help(manager_interface)
+
 def find_removable_media():
     devices_found = []
 
