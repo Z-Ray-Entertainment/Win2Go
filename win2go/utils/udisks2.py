@@ -9,7 +9,13 @@ size_suffixes = ["B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB"]
 
 bus = SystemBus()
 udisks2_bus = bus.get('org.freedesktop.UDisks2', '/org/freedesktop/UDisks2')
+udisks2_manager = bus.get('org.freedesktop.UDisks2', '/org/freedesktop/UDisks2/Manager')
 udisks2_object_manager = udisks2_bus['org.freedesktop.DBus.ObjectManager']
+
+def is_ntfs_supported() -> bool:
+    manager_properties = udisks2_manager['org.freedesktop.DBus.Properties']
+    supported_filesystems = manager_properties.Get('org.freedesktop.UDisks2.Manager', 'SupportedFilesystems')
+    return 'ntfs' in supported_filesystems
 
 def find_removable_media():
     devices_found = []
