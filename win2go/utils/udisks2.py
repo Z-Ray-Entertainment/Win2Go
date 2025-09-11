@@ -1,6 +1,7 @@
 import os
 
 import gi
+from gi.overrides.Gio import Gio
 from gi.repository import GLib
 
 gi.require_version('GioUnix', '2.0')
@@ -23,11 +24,19 @@ def mount_iso_image(file):
     manager_interface = udisks2_manager['org.freedesktop.UDisks2.Manager']
     fd = os.open(file.get_path(), os.O_RDONLY)
     print(fd)
-    manager_interface.LoopSetup(fd, {
-            'offset': None,
-            'size': None,
-            'read-only': True,
-            'no-part-scan': None,
+
+    auth = GLib.Variant('b', 0)
+    offset = GLib.Variant('t', 0)
+    size = GLib.Variant('t', 0)
+    readonly = GLib.Variant('b', 1)
+    scan = GLib.Variant('b', 0)
+    fd_list = Gio.UnixFDList.new_from_array([fd])
+
+    manager_interface.LoopSetup(fd, {'auth.no_user_interaction': auth,
+                'offset': offset,
+                'size': size,
+                'read-only': readonly,
+                'no-part-scan': scan
         }) # TODO: Options as GLib.Variant.
 
 def find_removable_media():
