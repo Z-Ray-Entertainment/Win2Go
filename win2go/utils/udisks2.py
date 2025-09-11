@@ -7,7 +7,7 @@ gi.require_version('GioUnix', '2.0')
 
 from pydbus import SystemBus
 
-size_suffixes = ["B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB"]
+SIZE_SUFFIXES = ["B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB"]
 
 bus = SystemBus()
 udisks2_bus = bus.get('org.freedesktop.UDisks2', '/org/freedesktop/UDisks2')
@@ -62,12 +62,12 @@ class BlockDevice:
     def get_size_readable(self):
         size_readable = self.device_size
         suffix = 0
-        while not (size_readable / 1024.) < 1 and suffix < len(size_suffixes):
+        while not (size_readable / 1024.) < 1 and suffix < len(SIZE_SUFFIXES):
             suffix += 1
             size_readable = size_readable / 1024.
 
         size_readable = '%.2f' % size_readable
-        return str(size_readable) + size_suffixes[suffix]
+        return str(size_readable) + SIZE_SUFFIXES[suffix]
 
     def print_device(self):
         print("{" +
