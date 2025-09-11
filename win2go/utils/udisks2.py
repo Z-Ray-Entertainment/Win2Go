@@ -1,5 +1,9 @@
+from pprint import pprint
+
 import gi
+from gi.overrides.Gio import Gio
 from gi.repository import GLib
+from gi.repository.GioUnix import FileDescriptorBased
 
 gi.require_version('GioUnix', '2.0')
 
@@ -17,9 +21,9 @@ def is_ntfs_supported() -> bool:
     supported_filesystems = manager_properties.Get('org.freedesktop.UDisks2.Manager', 'SupportedFilesystems')
     return 'ntfs' in supported_filesystems
 
-def mount_iso_image(file_path: str):
+def mount_iso_image(file):
     manager_interface = udisks2_manager['org.freedesktop.UDisks2.Manager']
-    help(manager_interface)
+    manager_interface.LoopSetup(file.read().get_fd(), []) # Requires an argument ... isn't it supposed to give me the fd?
 
 def find_removable_media():
     devices_found = []

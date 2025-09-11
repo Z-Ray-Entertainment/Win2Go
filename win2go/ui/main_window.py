@@ -43,7 +43,6 @@ class MainWindow(Gtk.ApplicationWindow):
     def on_image_opened(self, file_dialog, result):
         self.image_file = file_dialog.open_finish(result)
         self.open_iso.set_label(self.image_file.get_basename())
-
         mount_iso_image(self.image_file)
 
         windows_editions_found = get_windows_edition(self.image_file)
