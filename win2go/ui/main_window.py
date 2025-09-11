@@ -3,11 +3,11 @@ import gi
 from win2go.utils.block_device import find_block_devices, BlockDevice
 from win2go.ui.block_device_item import get_list_store_expression, build_block_device_model
 from win2go.ui.windows_edition_item import get_edition_list_store_expression, build_windows_edition_model
-from win2go.winlib import get_windows_edition
+from win2go.winlib import get_windows_edition, WindowsEdition
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
-from gi.repository import Gtk, Gio
+from gi.repository import Gtk
 from gi.repository.Gtk import DropDown, Button, FileFilter
 
 @Gtk.Template(resource_path="/de/z_ray/win2go/blp/main_window.ui")
@@ -22,6 +22,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
     image_file = None
     block_device: BlockDevice
+    windows_edition: WindowsEdition
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -41,21 +42,18 @@ class MainWindow(Gtk.ApplicationWindow):
 
     def on_image_opened(self, file_dialog, result):
         self.image_file = file_dialog.open_finish(result)
-        self.open_iso.set_label(get_file_name(self.image_file))
+        self.open_iso.set_label(self.image_file.get_basename())
 
         windows_editions_found = get_windows_edition(self.image_file)
         self.windows_edition_drop_down.set_visible(True)
         self.windows_edition_drop_down.set_expression(get_edition_list_store_expression())
         self.windows_edition_drop_down.set_model(build_windows_edition_model(windows_editions_found))
-        self.windows_edition_drop_down.connect("notify::selected-item", self.on_selected_item)
+        self.windows_edition_drop_down.connect("notify::selected-item", self.on_edition_selected)
 
     def on_block_device_selected_item(self, _drop_down, _selected_item):
         selected_item = _drop_down.get_selected_item()
         self.block_device = BlockDevice(selected_item.device_name, selected_item.device_size, selected_item.device_model)
 
     def on_edition_selected(self, _drop_down, _selected_item):
-        pass
-
-def get_file_name(file):
-    info = file.query_info("standard::name", Gio.FileQueryInfoFlags.NONE, None)
-    return info.get_name()
+        selected_item = _drop_down.get_selected_item()
+        self.windows_edition = WindowsEdition(selected_item.edition_name, selected_item.edition_index)
