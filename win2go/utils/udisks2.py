@@ -22,7 +22,8 @@ def find_removable_media():
             if device_properties.Get('org.freedesktop.UDisks2.Drive', 'Removable'):
                 device_model = device_properties.Get('org.freedesktop.UDisks2.Drive', 'Model')
                 device_size = device_properties.Get('org.freedesktop.UDisks2.Drive', 'Size')
-                devices_found.append(BlockDevice(device_size, device_model, managed_object))
+                if device_size > 0:
+                    devices_found.append(BlockDevice(device_size, device_model, managed_object))
         except GLib.GError: # Not all Devices have the .Drive Interface (e.g. loop devices)
             pass
 
