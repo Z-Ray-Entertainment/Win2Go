@@ -2,7 +2,8 @@ import gi
 
 from win2go.ui.block_device_item import get_list_store_expression, build_block_device_model
 from win2go.ui.windows_edition_item import get_edition_list_store_expression, build_windows_edition_model
-from win2go.utils.udisks2 import find_removable_media, BlockDevice, mount_iso_image
+from win2go.utils.udisks2.udisks2 import BlockDevice, mount_iso_image
+from win2go.utils.udisks2.udisks2_dasbus import find_removable_media
 from win2go.winlib import get_windows_edition, WindowsEdition
 
 gi.require_version("Gtk", "4.0")
