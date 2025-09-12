@@ -19,6 +19,9 @@ Portable SSD highly recommended.
 - cairo-devel
 - dbus-1-devel
 
+### Python Packages
+- dasbus
+
 `sudo zypper in gettext-tools wimtools gcc python3-devel cmake gobject-introspection-devel typelib-1_0-Adw-1 cairo-devel dbus-1-devel`
 
 ## Test requirements
