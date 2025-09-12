@@ -1,4 +1,5 @@
 import os
+from pprint import pprint
 from typing import List
 
 from dasbus.connection import SystemMessageBus
@@ -49,7 +50,7 @@ def mount_iso_image(file: File):
                               client=GLibClientUnix)
 
     fd = os.open(file.get_path(), os.O_RDONLY)
-    auth = GLib.Variant.new_byte(False)
+    auth = GLib.Variant.new_byte(True)
     readonly = GLib.Variant.new_byte(True)
-    fd_variant = GLib.Variant.new_handle(fd)
-    proxy.LoopSetup(0, {"fd": fd_variant, "auth.no_user_interaction": auth, "read-only": readonly, },)
+    new_fd = proxy.LoopSetup(fd, {"read-only": readonly, },)
+    print(new_fd)
