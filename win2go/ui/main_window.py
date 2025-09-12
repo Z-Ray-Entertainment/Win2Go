@@ -3,7 +3,8 @@ import gi
 from win2go.ui.block_device_item import get_list_store_expression, build_block_device_model
 from win2go.ui.windows_edition_item import get_edition_list_store_expression, build_windows_edition_model
 from win2go.utils.udisks2.block_device import BlockDevice
-from win2go.utils.udisks2.udisks2_dasbus import find_removable_media, mount_iso_image
+from win2go.utils.udisks2.loop_device import LoopDevice
+from win2go.utils.udisks2.udisks2_dasbus import find_removable_media, loop_setup, filesystem_mount
 from win2go.winlib import get_windows_edition, WindowsEdition
 
 gi.require_version("Gtk", "4.0")
@@ -21,7 +22,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
     file_dialog: Gtk.FileDialog
 
-    image_file = None
+    image_file: LoopDevice
     block_device: BlockDevice
     windows_edition: WindowsEdition
 
@@ -42,11 +43,12 @@ class MainWindow(Gtk.ApplicationWindow):
         Gtk.FileDialog(default_filter=self.file_filter_image).open(self, None, self.on_image_opened)
 
     def on_image_opened(self, file_dialog, result):
-        self.image_file = file_dialog.open_finish(result)
-        self.open_iso.set_label(self.image_file.get_basename())
-        mount_iso_image(self.image_file)
+        iso_file = file_dialog.open_finish(result)
+        self.open_iso.set_label(iso_file.get_basename())
+        self.image_file = LoopDevice(loop_setup(iso_file))
+        self.image_file.mount()
 
-        windows_editions_found = get_windows_edition(self.image_file)
+        windows_editions_found = get_windows_edition(iso_file)
         self.windows_edition_drop_down.set_visible(True)
         self.windows_edition_drop_down.set_expression(get_edition_list_store_expression())
         self.windows_edition_drop_down.set_model(build_windows_edition_model(windows_editions_found))

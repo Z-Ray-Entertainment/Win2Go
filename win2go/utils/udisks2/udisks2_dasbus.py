@@ -43,14 +43,20 @@ def find_removable_media() -> List[BlockDevice]:
             pass
     return devices_found
 
-def mount_iso_image(file: File):
+def loop_setup(file: File) -> str:
     proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
                               "/org/freedesktop/UDisks2/Manager",
                               "org.freedesktop.UDisks2.Manager",
                               client=GLibClientUnix)
 
     fd = os.open(file.get_path(), os.O_RDONLY)
-    auth = GLib.Variant.new_byte(True)
     readonly = GLib.Variant.new_byte(True)
-    new_fd = proxy.LoopSetup(fd, {"read-only": readonly, },)
-    print(new_fd)
+    loop_path = proxy.LoopSetup(fd, {"read-only": readonly, },)
+
+    return loop_path
+
+def filesystem_mount(object_path: str) -> str:
+    proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
+                              object_path,
+                              "org.freedesktop.UDisks2.Filesystem")
+    return proxy.Mount({})
