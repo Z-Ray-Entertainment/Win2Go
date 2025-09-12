@@ -1,7 +1,6 @@
 udisks_dir = join_paths(moduledir, 'utils', 'udisks2')
 udisks_sources = files([
     '__init__.py',
-    'udisks2.py',
     'udisks2_dasbus.py',
     'block_device.py'
 ])
