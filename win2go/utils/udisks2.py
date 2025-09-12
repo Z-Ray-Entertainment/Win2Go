@@ -23,21 +23,15 @@ def is_ntfs_supported() -> bool:
 def mount_iso_image(file):
     manager_interface = udisks2_manager['org.freedesktop.UDisks2.Manager']
     fd = os.open(file.get_path(), os.O_RDONLY)
-    print(fd)
 
     auth = GLib.Variant('b', 0)
-    offset = GLib.Variant('t', 0)
-    size = GLib.Variant('t', 0)
-    readonly = GLib.Variant('b', 1)
-    scan = GLib.Variant('b', 0)
-    fd_list = Gio.UnixFDList.new_from_array([fd])
+    readonly = GLib.Variant('b', True)
+    fd_variant = GLib.Variant('h', fd)
 
-    manager_interface.LoopSetup(fd, {'auth.no_user_interaction': auth,
-                'offset': offset,
-                'size': size,
-                'read-only': readonly,
-                'no-part-scan': scan
-        }) # TODO: Options as GLib.Variant.
+    manager_interface.LoopSetup(0, {'fd': fd_variant,
+                                    'auth.no_user_interaction': auth,
+                                    'read-only': readonly,
+                                }) # TODO: Options as GLib.Variant.
 
 def find_removable_media():
     devices_found = []

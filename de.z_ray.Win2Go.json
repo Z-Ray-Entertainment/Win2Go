@@ -64,6 +64,12 @@
           "type": "git",
           "url": "https://github.com/LEW21/pydbus",
           "tag": "v0.6.0"
+        },
+        {
+          "type": "patch",
+          "paths": [
+            "pydbus_unixfd.patch"
+          ]
         }
       ]
     },
