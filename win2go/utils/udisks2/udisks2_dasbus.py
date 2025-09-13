@@ -66,7 +66,7 @@ def loop_setup(file: File) -> str | None:
     fd = os.open(file_path, os.O_RDONLY)
     readonly = GLib.Variant.new_byte(True)
     loop_path = proxy.LoopSetup(fd, {"read-only": readonly, }, )
-
+    # TODO: Mount loop_path into sandbox to get rid of --filesystem=/run/media/
     return loop_path
 
 
