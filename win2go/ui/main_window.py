@@ -133,7 +133,7 @@ class MainWindow(Gtk.ApplicationWindow):
         print("Update changes...")
         changes: str = ""
         if self.selected_drive is not None:
-            device_text = self.selected_drive.device_model + " (" + str(self.selected_drive.device_size) + ")"
+            device_text = self.selected_drive.device_model + " (" + str(self.selected_drive.get_size_readable()) + ")"
             changes += _("Drive {device} will be erased".format(device=device_text))
 
         text_buffer: Gtk.TextBuffer = self.text_view_changes.get_buffer()
