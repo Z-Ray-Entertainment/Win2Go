@@ -5,7 +5,7 @@ from dasbus.connection import SystemMessageBus
 from dasbus.error import DBusError
 from dasbus.unix import GLibClientUnix
 from gi.overrides import GLib
-from gi.repository.Gio import File
+from gi.repository.Gio import File, FileQueryInfoFlags
 
 from win2go.utils.udisks2.drive import Drive
 
@@ -50,7 +50,20 @@ def loop_setup(file: File) -> str:
                               "org.freedesktop.UDisks2.Manager",
                               client=GLibClientUnix)
 
-    fd = os.open(file.get_path(), os.O_RDONLY)
+    file_path = file.get_path() # Sandbox path, as fallback
+    try:
+        # Get FileInfo for File
+        file_info = file.query_info("xattr::document-portal.host-path", FileQueryInfoFlags.NONE, None)
+
+        # Query file attribute for real path
+        real_path = file_info.get_attribute_string("xattr::document-portal.host-path")
+        if real_path is not None: # Attribute does not exist if None
+            file_path = real_path
+        else:
+            pass # TODO: Throw error dialog to request user to broaden sandbox permissions.
+    except GLib.Error:
+        print("Can not get real path. Stuck with sandbox")
+    fd = os.open(file_path, os.O_RDONLY)
     readonly = GLib.Variant.new_byte(True)
     loop_path = proxy.LoopSetup(fd, {"read-only": readonly, }, )
 
