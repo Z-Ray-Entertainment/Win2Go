@@ -3,7 +3,7 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 from gi.repository import Gtk, GObject, Gio
 
-class BlockDeviceItem(GObject.Object):
+class DriveItem(GObject.Object):
     key = GObject.Property(type=str, flags=GObject.ParamFlags.READWRITE, default="")
     value = GObject.Property(
         type=str,
@@ -35,15 +35,15 @@ class BlockDeviceItem(GObject.Object):
     )
 
 
-def build_block_device_model(found_block_devices):
-    block_device_additions = _build_block_device_additions(found_block_devices)
-    block_device_model = Gio.ListStore(item_type=BlockDeviceItem)
+def build_block_device_model(all_removable_drives):
+    block_device_additions = _build_block_device_additions(all_removable_drives)
+    block_device_model = Gio.ListStore(item_type=DriveItem)
     block_device_model.splice(0, 0, block_device_additions)
     return block_device_model
 
 def get_list_store_expression():
     return Gtk.PropertyExpression.new(
-        BlockDeviceItem,
+        DriveItem,
         None,
         "value",
     )
@@ -52,7 +52,7 @@ def _build_block_device_additions(block_devices):
     block_device_additions = []
     for bd in block_devices:
         display_name = bd.device_model + " (" + bd.get_size_readable() + ")"
-        block_item = BlockDeviceItem(key=bd.device_object,
+        block_item = DriveItem(key=bd.device_object,
                                      value=display_name,
                                      device_object=bd.device_object,
                                      device_size=bd.device_size,

@@ -1,10 +1,12 @@
+from typing import List
+
 import gi
 
 from win2go.ui.block_device_item import get_list_store_expression, build_block_device_model
 from win2go.ui.windows_edition_item import get_edition_list_store_expression, build_windows_edition_model
-from win2go.utils.udisks2.block_device import BlockDevice
+from win2go.utils.udisks2.drive import Drive
 from win2go.utils.udisks2.loop_device import LoopDevice
-from win2go.utils.udisks2.udisks2_dasbus import find_removable_media, loop_setup, filesystem_mount
+from win2go.utils.udisks2.udisks2_dasbus import find_removable_media, loop_setup
 from win2go.utils.wimlib.wim_info import WIMInfo
 from win2go.utils.wimlib.wimlib import get_wim_info
 from win2go.utils.wimlib.windows_edition import WindowsEdition
@@ -25,19 +27,20 @@ class MainWindow(Gtk.ApplicationWindow):
     file_dialog: Gtk.FileDialog
 
     image_file: LoopDevice
-    block_device: BlockDevice
+    all_removable_drives: List[Drive]
     wim_info: WIMInfo
-    windows_edition: WindowsEdition
+    selected_windows_edition: WindowsEdition
+    selected_drive: Drive
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        block_devices_found = find_removable_media()
-        if len(block_devices_found) > 0:
-            self.block_device = block_devices_found[0]
+        self.all_removable_drives = find_removable_media()
+        if len(self.all_removable_drives) > 0:
+            self.selected_drive = self.all_removable_drives[0]
 
         self.device_drop_down.set_expression(get_list_store_expression())
-        self.device_drop_down.set_model(build_block_device_model(block_devices_found))
+        self.device_drop_down.set_model(build_block_device_model(self.all_removable_drives))
         self.device_drop_down.connect("notify::selected-item", self.on_block_device_selected_item)
 
         self.open_iso.connect("clicked", lambda *_: self.open_image())
@@ -59,7 +62,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
     def on_block_device_selected_item(self, _drop_down, _selected_item):
         selected_item = _drop_down.get_selected_item()
-        self.block_device = BlockDevice(selected_item.device_size, selected_item.device_model, selected_item.device_object)
+        self.block_device = Drive(selected_item.device_size, selected_item.device_model, selected_item.device_object, "")
 
     def on_edition_selected(self, _drop_down, _selected_item):
         selected_item_index = _drop_down.get_selected()

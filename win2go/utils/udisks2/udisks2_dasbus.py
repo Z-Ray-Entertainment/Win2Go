@@ -1,5 +1,4 @@
 import os
-from pprint import pprint
 from typing import List
 
 from dasbus.connection import SystemMessageBus
@@ -8,9 +7,10 @@ from dasbus.unix import GLibClientUnix
 from gi.overrides import GLib
 from gi.repository.Gio import File
 
-from win2go.utils.udisks2.block_device import BlockDevice
+from win2go.utils.udisks2.drive import Drive
 
 sys_bus = SystemMessageBus()
+drive_to_block_devices = {}
 
 def get_supported_filesystems() -> List[str]:
     proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
@@ -27,7 +27,7 @@ def get_managed_objects() -> List[str]:
                               "org.freedesktop.DBus.ObjectManager")
     return proxy.GetManagedObjects()
 
-def find_removable_media() -> List[BlockDevice]:
+def find_removable_media() -> List[Drive]:
     devices_found = []
     for managed in get_managed_objects():
         managed_properties = sys_bus.get_proxy("org.freedesktop.UDisks2",
@@ -38,7 +38,8 @@ def find_removable_media() -> List[BlockDevice]:
                 model = managed_properties.Get("org.freedesktop.UDisks2.Drive", "Model")
                 size = managed_properties.Get("org.freedesktop.UDisks2.Drive", "Size")
                 if size.unpack() > 0:
-                    devices_found.append(BlockDevice(size.unpack(), model.unpack(), managed))
+                    devices_found.append(Drive(size.unpack(), model.unpack(), managed, drive_to_block_devices[managed]))
+
         except DBusError:  # Not all Devices have the .Drive Interface (e.g. loop devices)
             pass
     return devices_found
@@ -60,3 +61,22 @@ def filesystem_mount(object_path: str) -> str:
                               object_path,
                               "org.freedesktop.UDisks2.Filesystem")
     return proxy.Mount({})
+
+def find_block_devices_for_drive(drive_path: str) -> List[str]:
+    return drive_to_block_devices[drive_path]
+
+def _get_block_devices():
+    proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
+                              "/org/freedesktop/UDisks2/Manager")
+    for block in proxy.GetBlockDevices({}):
+        block_proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
+                                        block,
+                                        "org.freedesktop.UDisks2.Block")
+        drive = block_proxy.Drive
+        drive_entry = drive_to_block_devices.get(drive)
+        if not drive_entry:
+            drive_to_block_devices[drive] = [block]
+        else:
+            drive_entry.append(block)
+
+_get_block_devices()

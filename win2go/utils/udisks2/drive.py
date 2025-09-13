@@ -1,14 +1,18 @@
+from typing import List
+
 SIZE_SUFFIXES = ["B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB"]
 
-class BlockDevice:
+class Drive:
     device_object: str
     device_size: int
     device_model: str
+    device_block_devices: List[str]
 
-    def __init__(self, device_size: int, device_model: str, device_object: str):
+    def __init__(self, device_size: int, device_model: str, device_object: str, block_devices: List[str]):
         self.device_size = device_size
         self.device_model = device_model
         self.device_object = device_object
+        self.device_block_devices = block_devices
 
     def get_size_readable(self):
         size_readable = self.device_size
@@ -20,9 +24,18 @@ class BlockDevice:
         size_readable = '%.2f' % size_readable
         return str(size_readable) + SIZE_SUFFIXES[suffix]
 
+    def get_top_level_block_device(self) -> str:
+        self.device_block_devices.sort()
+        return self.device_block_devices[0]
+
     def print_device(self):
+        block_dev = "["
+        for block in self.device_block_devices:
+            block_dev += block + ","
+        block_dev += "]"
         print("{" +
               str(self.device_size) + ", " +
               self.device_model + ", " +
               self.device_object + ", " +
+              block_dev + ", " +
               "}")
