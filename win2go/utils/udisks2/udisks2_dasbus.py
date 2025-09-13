@@ -84,9 +84,10 @@ def _get_block_devices():
 
 
 def _get_supported_filesystems():
+    global supported_file_systems
     proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
                               "/org/freedesktop/UDisks2/Manager")
-    supported_filesystems = proxy.SupportedFilesystems
+    supported_file_systems = proxy.SupportedFilesystems
 
 
 _get_block_devices()
