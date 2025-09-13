@@ -11,4 +11,3 @@ class LoopDevice:
 
     def mount(self):
         self.mount_path = filesystem_mount(self.obj_path)
-        print(self.mount_path)
