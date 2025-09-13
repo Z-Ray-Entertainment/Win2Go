@@ -10,22 +10,21 @@ from gi.repository.Gio import File
 from win2go.utils.udisks2.drive import Drive
 
 sys_bus = SystemMessageBus()
+
 drive_to_block_devices = {}
+supported_file_systems = []
 
-def get_supported_filesystems() -> List[str]:
-    proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
-                              "/org/freedesktop/UDisks2/Manager")
-    print(proxy.SupportedFilesystems)
-    return proxy.SupportedFilesystems
 
-def is_ntfs_supported() -> bool:
-    return "ntfs" in get_supported_filesystems()
+def does_system_support_required_filesystems() -> bool:
+    return "ntfs" in supported_file_systems and "udf" in supported_file_systems
+
 
 def get_managed_objects() -> List[str]:
     proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
                               "/org/freedesktop/UDisks2",
                               "org.freedesktop.DBus.ObjectManager")
     return proxy.GetManagedObjects()
+
 
 def find_removable_media() -> List[Drive]:
     devices_found = []
@@ -44,6 +43,7 @@ def find_removable_media() -> List[Drive]:
             pass
     return devices_found
 
+
 def loop_setup(file: File) -> str:
     proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
                               "/org/freedesktop/UDisks2/Manager",
@@ -52,9 +52,10 @@ def loop_setup(file: File) -> str:
 
     fd = os.open(file.get_path(), os.O_RDONLY)
     readonly = GLib.Variant.new_byte(True)
-    loop_path = proxy.LoopSetup(fd, {"read-only": readonly, },)
+    loop_path = proxy.LoopSetup(fd, {"read-only": readonly, }, )
 
     return loop_path
+
 
 def filesystem_mount(object_path: str) -> str:
     proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
@@ -62,8 +63,10 @@ def filesystem_mount(object_path: str) -> str:
                               "org.freedesktop.UDisks2.Filesystem")
     return proxy.Mount({})
 
+
 def find_block_devices_for_drive(drive_path: str) -> List[str]:
     return drive_to_block_devices[drive_path]
+
 
 def _get_block_devices():
     proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
@@ -79,4 +82,12 @@ def _get_block_devices():
         else:
             drive_entry.append(block)
 
+
+def _get_supported_filesystems():
+    proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
+                              "/org/freedesktop/UDisks2/Manager")
+    supported_filesystems = proxy.SupportedFilesystems
+
+
 _get_block_devices()
+_get_supported_filesystems()
