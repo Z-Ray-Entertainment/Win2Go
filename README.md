@@ -33,13 +33,14 @@ Portable SSD highly recommended.
 - cairo-devel
 - dbus-1-devel
 
+`sudo zypper in gettext-tools wimtools gcc python3-devel cmake gobject-introspection-devel typelib-1_0-Adw-1 cairo-devel dbus-1-devel`
+
 ### Python Packages
 - dasbus
 
-`sudo zypper in gettext-tools wimtools gcc python3-devel cmake gobject-introspection-devel typelib-1_0-Adw-1 cairo-devel dbus-1-devel`
-
 ## Test requirements
 - Gnome Builder (Test build of flatpak)
+- Workbench to test and create blueprints
 
 ## Special Thanks to
 - [jxctn0](https://github.com/jxctn0/win2go) without this script I didn't knew how to pull this off
