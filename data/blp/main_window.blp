@@ -2,163 +2,167 @@ using Gtk 4.0;
 using Adw 1;
 
 template $Win2GoMainWindow: ApplicationWindow {
-    FileFilter file_filter_image {
-      mime-types [
-        "application/x-cd-image",
-        "application/x-iso9660-image"
-      ]
+  FileFilter file_filter_image {
+    mime-types [
+      "application/x-cd-image",
+      "application/x-iso9660-image",
+    ]
+  }
+
+  default-width: 600;
+  default-height: 600;
+  title: "Win2Go";
+
+  [titlebar]
+  Adw.HeaderBar {
+    title-widget: Adw.CarouselIndicatorDots {
+      carousel: carousel;
+      orientation: horizontal;
+    };
+
+    Button bt_about {
+      tooltip-text: _("About Win2Go");
+      icon-name: "help-about-symbolic";
     }
 
-    default-width: 600;
-    default-height: 600;
-    title: "Win2Go";
+    styles [
+      "flat",
+    ]
+  }
 
-    [titlebar]
-    Adw.HeaderBar {
-      title-widget: Adw.CarouselIndicatorDots {
-        carousel: carousel;
-        orientation: horizontal;
-      };
+  Overlay {
+    [overlay]
+    Button btn_back {
+      margin-start: 12;
+      icon-name: "go-previous-symbolic";
+      halign: start;
+      valign: center;
+      visible: false;
+      tooltip-text: _("Previous");
 
       styles [
-        "flat",
+        "circular",
       ]
     }
 
-    Overlay {
-      [overlay]
-      Button btn_back {
-        margin-start: 12;
-        icon-name: "go-previous-symbolic";
-        halign: start;
-        valign: center;
-        visible: false;
-        tooltip-text: _("Previous");
+    Adw.Carousel carousel {
+      vexpand: true;
+      hexpand: true;
+      allow-scroll-wheel: true;
+      allow-mouse-drag: true;
+      allow-long-swipes: true;
+      margin-start: 60;
+      margin-end: 60;
 
-        styles [
-          "circular",
-        ]
+      Adw.StatusPage {
+        vexpand: true;
+        hexpand: true;
+        title: "Win2Go";
+        description: _("Install Windows on USB Devices");
+        icon-name: "de.z_ray.Win2Go";
       }
 
-      Adw.Carousel carousel {
-          vexpand: true;
-          hexpand: true;
-          allow-scroll-wheel: true;
-          allow-mouse-drag: true;
-          allow-long-swipes: true;
-          margin-start: 60;
-          margin-end: 60;
+      Adw.StatusPage {
+        vexpand: true;
+        hexpand: true;
+        title: _("Device");
+        description: _("Choose the device Windows should be installed to");
+        icon-name: "usb-device";
 
-        Adw.StatusPage {
-          vexpand: true;
-          hexpand: true;
-          title: "Win2Go";
-          description: _("Install Windows on USB Devices");
-          icon-name: "de.z_ray.Win2Go";
-        }
+        child: Box {
+          halign: center;
+          valign: center;
 
-        Adw.StatusPage {
-          vexpand: true;
-          hexpand: true;
-          title: _("Device");
-          description: _("Choose the device Windows should be installed to");
-          icon-name: "usb-device";
-
-          child: Box{
-            halign: center;
-            valign: center;
-
-            DropDown device_drop_down {
-              enable-search: true;
-            }
-          };
-        }
-
-        Adw.StatusPage {
-          vexpand: true;
-          hexpand: true;
-          title: _("Edition");
-          description: _("Select Windows Edition");
-          icon-name: "windows-logo";
-
-          child: Box{
-            halign: center;
-            valign: center;
-            orientation: vertical;
-            spacing: 10;
-
-            Button open_iso {
-              label: _("Choose ISO");
-              tooltip-text: _("Choose Windows ISO-File");
-              icon-name: "folder-open-symbolic";
-              styles [
-                "pill"
-              ]
-            }
-
-            DropDown windows_edition_drop_down {
-              enable-search: true;
-              visible: false;
-            }
-          };
-        }
-
-        Adw.StatusPage {
-          vexpand: true;
-          hexpand: true;
-          title: _("User");
-          description: _("Set user details");
-          icon-name: "people-symbolic";
-
-          child: ListBox{
-
-            Adw.EntryRow windows_user_name {
-              title: _("User Name");
-            }
-
-            Adw.PasswordEntryRow windows_user_pasword {
-              title: _("Password");
-            }
-
-            Adw.SwitchRow {
-              title: _("Administrator");
-              subtitle: _("User should have Administrator Privileges");
-            }
-          };
-        }
-
-        Adw.StatusPage {
-          vexpand: true;
-          hexpand: true;
-          title: _("Advanced Options");
-          description: _("Set advanced options (Optional)");
-          icon-name: "wrench-wide-symbolic";
-
-          child: ListBox{
-
-            Adw.SwitchRow windows_disable_cpu {
-              title: _("Disable CPU check");
-            }
-
-            Adw.SwitchRow windows_disable_tpm {
-              title: _("Disable TMP 2.0 check");
-            }
-          };
-        }
+          DropDown device_drop_down {
+            enable-search: true;
+          }
+        };
       }
 
-      [overlay]
-      Button btn_next {
-        margin-end: 12;
-        icon-name: "go-next-symbolic";
-        halign: end;
-        valign: center;
-        tooltip-text: _("Next");
+      Adw.StatusPage {
+        vexpand: true;
+        hexpand: true;
+        title: _("Edition");
+        description: _("Select Windows Edition");
+        icon-name: "windows-logo";
 
-        styles [
-          "circular",
-          "suggested-action",
-        ]
+        child: Box {
+          halign: center;
+          valign: center;
+          orientation: vertical;
+          spacing: 10;
+
+          Button open_iso {
+            label: _("Choose ISO");
+            tooltip-text: _("Choose Windows ISO-File");
+            icon-name: "folder-open-symbolic";
+
+            styles [
+              "pill",
+            ]
+          }
+
+          DropDown windows_edition_drop_down {
+            enable-search: true;
+            visible: false;
+          }
+        };
+      }
+
+      Adw.StatusPage {
+        vexpand: true;
+        hexpand: true;
+        title: _("User");
+        description: _("Set user details");
+        icon-name: "people-symbolic";
+
+        child: ListBox {
+          Adw.EntryRow windows_user_name {
+            title: _("User Name");
+          }
+
+          Adw.PasswordEntryRow windows_user_pasword {
+            title: _("Password");
+          }
+
+          Adw.SwitchRow {
+            title: _("Administrator");
+            subtitle: _("User should have Administrator Privileges");
+          }
+        };
+      }
+
+      Adw.StatusPage {
+        vexpand: true;
+        hexpand: true;
+        title: _("Advanced Options");
+        description: _("Set advanced options (Optional)");
+        icon-name: "wrench-wide-symbolic";
+
+        child: ListBox {
+          Adw.SwitchRow windows_disable_cpu {
+            title: _("Disable CPU check");
+          }
+
+          Adw.SwitchRow windows_disable_tpm {
+            title: _("Disable TMP 2.0 check");
+          }
+        };
+      }
+    }
+
+    [overlay]
+    Button btn_next {
+      margin-end: 12;
+      icon-name: "go-next-symbolic";
+      halign: end;
+      valign: center;
+      tooltip-text: _("Next");
+
+      styles [
+        "circular",
+        "suggested-action",
+      ]
     }
   }
 }
