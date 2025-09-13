@@ -20,6 +20,7 @@ Portable SSD highly recommended.
 - Create BOOT and WINDOWS partition
 - Extract selected Windows edition to device
 - Setup Windows Bootloader
+- Unmount and remove loop device of ISO image
 
 ## Development requirements
 - gettext-tools (optional extracting pot-file)
