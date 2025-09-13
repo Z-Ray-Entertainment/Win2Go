@@ -8,6 +8,7 @@
     "--socket=wayland",
     "--socket=fallback-x11",
     "--system-talk-name=org.freedesktop.UDisks2",
+    "--filesystem=xdg-download",
     "--filesystem=/run/media"
   ],
   "cleanup": [
