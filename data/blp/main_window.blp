@@ -149,6 +149,41 @@ template $Win2GoMainWindow: ApplicationWindow {
           }
         };
       }
+
+      Adw.StatusPage {
+        vexpand: true;
+        hexpand: true;
+        title: _("Confirm");
+        description: _("The following changes will be performed");
+        icon-name: "drive-symbolic";
+
+        child: Box {
+          hexpand: true;
+          vexpand: true;
+          orientation: vertical;
+          spacing: 10;
+
+          Gtk.TextView text_view_changes {
+            editable: false;
+
+            buffer: Gtk.TextBuffer {
+              text: _("Bla\nNa\nBa\nRam\n");
+            };
+          }
+
+          Button bt_flash {
+            label: _("Flash");
+            tooltip-text: _("Flash device");
+            halign: center;
+            valign: center;
+
+            styles [
+              "pill",
+              "error",
+            ]
+          }
+        };
+      }
     }
 
     [overlay]

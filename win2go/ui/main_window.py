@@ -15,7 +15,7 @@ from win2go.utils.wimlib.windows_edition import WindowsEdition
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 from gi.repository import Gtk, Adw
-from gi.repository.Gtk import DropDown, Button, FileFilter
+from gi.repository.Gtk import DropDown, Button, FileFilter, TextView
 
 
 @Gtk.Template(resource_path="/de/z_ray/win2go/blp/main_window.ui")
@@ -23,9 +23,10 @@ class MainWindow(Gtk.ApplicationWindow):
     __gtype_name__ = "Win2GoMainWindow"
     device_drop_down: DropDown = Gtk.Template.Child()
     open_iso: Button = Gtk.Template.Child()
-    bt_about = Gtk.Template.Child()
+    bt_about: Button = Gtk.Template.Child()
     file_filter_image: FileFilter = Gtk.Template.Child()
     windows_edition_drop_down: DropDown = Gtk.Template.Child()
+    text_view_changes: TextView = Gtk.Template.Child()
 
     file_dialog: Gtk.FileDialog
 
@@ -48,6 +49,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
         self.open_iso.connect("clicked", lambda *_: self.open_image())
         self.bt_about.connect("clicked", self.open_about)
+        self._update_changes()
 
     def open_image(self):
         Gtk.FileDialog(default_filter=self.file_filter_image).open(self, None, self.on_image_opened)
@@ -67,6 +69,7 @@ class MainWindow(Gtk.ApplicationWindow):
     def on_block_device_selected_item(self, _drop_down, _selected_item):
         selected_item = _drop_down.get_selected()
         self.selected_drive = self.all_removable_drives[selected_item]
+        self._update_changes()
 
     def on_edition_selected(self, _drop_down, _selected_item):
         selected_item_index = _drop_down.get_selected()
@@ -109,3 +112,14 @@ class MainWindow(Gtk.ApplicationWindow):
 
         dialog.add_acknowledgement_section(_("Special thanks to"), ["jxctn0"])
         dialog.present(self)
+
+    def _update_changes(self):
+        print("Update changes...")
+        changes: str = ""
+        if self.selected_drive is not None:
+            device_text = self.selected_drive.device_model + " (" + str(self.selected_drive.device_size) + ")"
+            changes += _("Drive {device} will be erased".format(device=device_text))
+
+        text_buffer: Gtk.TextBuffer = self.text_view_changes.get_buffer()
+        text_buffer.set_text(changes)
+        print("Changes:", changes)
