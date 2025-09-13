@@ -8,6 +8,17 @@ Linux users call this "Live Version" but persistent instead of in-memory.
 
 Portable SSD highly recommended.
 
+## Features
+- List and select removable media (0B devices are hidden)
+- Open and Mount Windows ISO images
+- List and select available Windows Editions contained on ISO image
+
+### Work in Progress
+- Set user details
+- Registry edits
+- Format removable
+- Install Windows on removable media
+
 ## Development requirements
 - gettext-tools (optional extracting pot-file)
 - wimtools
