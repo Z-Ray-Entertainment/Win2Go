@@ -16,8 +16,10 @@ Portable SSD highly recommended.
 ### Work in Progress
 - Set user details
 - Registry edits
-- Format removable
-- Install Windows on removable media
+- Format removable media as gpt
+- Create BOOT and WINDOWS partition
+- Extract selected Windows edition to device
+- Setup Windows Bootloader
 
 ## Development requirements
 - gettext-tools (optional extracting pot-file)
