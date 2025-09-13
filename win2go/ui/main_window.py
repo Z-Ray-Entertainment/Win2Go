@@ -56,12 +56,12 @@ class MainWindow(Gtk.ApplicationWindow):
 
     def on_image_opened(self, file_dialog, result):
         iso_file = file_dialog.open_finish(result)
-        self.open_iso.set_label(iso_file.get_basename())
         loop_path = loop_setup(iso_file)
         if loop_path is None:
-            pass # TODO: Show sandbox path error dialog
+            self._create_error_sandbox_path_dialog()
         else:
-            self.image_file = LoopDevice(loop_setup(iso_file))
+            self.open_iso.set_label(iso_file.get_basename())
+            self.image_file = LoopDevice(loop_path)
             self.image_file.mount()
             self.wim_info = get_wim_info(self.image_file.mount_path)
             self.windows_edition_drop_down.set_visible(True)
@@ -77,6 +77,19 @@ class MainWindow(Gtk.ApplicationWindow):
     def on_edition_selected(self, _drop_down, _selected_item):
         selected_item_index = _drop_down.get_selected()
         self.selected_windows_edition = self.wim_info.images[selected_item_index]
+
+    def _create_error_sandbox_path_dialog(self, *_args):
+        dialog = Adw.AlertDialog(
+            heading=_("Sandbox Error"),
+            body=_("Win2Go can not access the image file. Please allow user home directory access manually. Or update to xdg-desktop-portal 1.20."),
+            close_response="okay",
+        )
+
+        dialog.add_response("okay", _("Okay"))
+        dialog.choose(self, None, self._on_close_sandbox_error)
+
+    def _on_close_sandbox_error(self, _dialog, task):
+        pass
 
     def _open_about(self, _widget):
         dialog = Adw.AboutDialog(
