@@ -1,4 +1,5 @@
 import os
+import re
 from typing import List
 
 from dasbus.connection import SystemMessageBus
@@ -14,6 +15,7 @@ sys_bus = SystemMessageBus()
 drive_to_block_devices = {}
 supported_file_systems = []
 
+sandbox_regex = re.compile('/run/user/[0-9]*/doc/[a-zA-Z0-9]*/.*')
 
 def does_system_support_required_filesystems() -> bool:
     return "ntfs" in supported_file_systems and "udf" in supported_file_systems
@@ -44,7 +46,7 @@ def find_removable_media() -> List[Drive]:
     return devices_found
 
 
-def loop_setup(file: File) -> str:
+def loop_setup(file: File) -> str | None:
     proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
                               "/org/freedesktop/UDisks2/Manager",
                               "org.freedesktop.UDisks2.Manager",
@@ -52,15 +54,13 @@ def loop_setup(file: File) -> str:
 
     file_path = file.get_path() # Sandbox path, as fallback
     try:
-        # Get FileInfo for File
         file_info = file.query_info("xattr::document-portal.host-path", FileQueryInfoFlags.NONE, None)
-
-        # Query file attribute for real path
         real_path = file_info.get_attribute_string("xattr::document-portal.host-path")
-        if real_path is not None: # Attribute does not exist if None
+        if real_path is not None: # Is None if attribute does not exist
             file_path = real_path
         else:
-            pass # TODO: Throw error dialog to request user to broaden sandbox permissions.
+            if sandbox_regex.match(file_path): # File path is sandbox path, does not work!
+                return None
     except GLib.Error:
         print("Can not get real path. Stuck with sandbox")
     fd = os.open(file_path, os.O_RDONLY)

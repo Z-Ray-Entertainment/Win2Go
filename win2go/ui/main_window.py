@@ -57,14 +57,17 @@ class MainWindow(Gtk.ApplicationWindow):
     def on_image_opened(self, file_dialog, result):
         iso_file = file_dialog.open_finish(result)
         self.open_iso.set_label(iso_file.get_basename())
-        self.image_file = LoopDevice(loop_setup(iso_file))
-        self.image_file.mount()
-
-        self.wim_info = get_wim_info(self.image_file.mount_path)
-        self.windows_edition_drop_down.set_visible(True)
-        self.windows_edition_drop_down.set_expression(get_edition_list_store_expression())
-        self.windows_edition_drop_down.set_model(build_windows_edition_model(self.wim_info))
-        self.windows_edition_drop_down.connect("notify::selected-item", self.on_edition_selected)
+        loop_path = loop_setup(iso_file)
+        if loop_path is None:
+            pass # TODO: Show sandbox path error dialog
+        else:
+            self.image_file = LoopDevice(loop_setup(iso_file))
+            self.image_file.mount()
+            self.wim_info = get_wim_info(self.image_file.mount_path)
+            self.windows_edition_drop_down.set_visible(True)
+            self.windows_edition_drop_down.set_expression(get_edition_list_store_expression())
+            self.windows_edition_drop_down.set_model(build_windows_edition_model(self.wim_info))
+            self.windows_edition_drop_down.connect("notify::selected-item", self.on_edition_selected)
 
     def on_block_device_selected_item(self, _drop_down, _selected_item):
         selected_item = _drop_down.get_selected()
