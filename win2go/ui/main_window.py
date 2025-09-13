@@ -48,7 +48,7 @@ class MainWindow(Gtk.ApplicationWindow):
         self.device_drop_down.connect("notify::selected-item", self.on_block_device_selected_item)
 
         self.open_iso.connect("clicked", lambda *_: self.open_image())
-        self.bt_about.connect("clicked", self.open_about)
+        self.bt_about.connect("clicked", self._open_about)
         self._update_changes()
 
     def open_image(self):
@@ -78,7 +78,7 @@ class MainWindow(Gtk.ApplicationWindow):
         selected_item_index = _drop_down.get_selected()
         self.selected_windows_edition = self.wim_info.images[selected_item_index]
 
-    def open_about(self, _widget):
+    def _open_about(self, _widget):
         dialog = Adw.AboutDialog(
             application_icon=const.APP_ID,
             application_name=const.APP_NAME,
