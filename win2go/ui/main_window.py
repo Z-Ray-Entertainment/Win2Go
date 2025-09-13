@@ -5,7 +5,9 @@ from win2go.ui.windows_edition_item import get_edition_list_store_expression, bu
 from win2go.utils.udisks2.block_device import BlockDevice
 from win2go.utils.udisks2.loop_device import LoopDevice
 from win2go.utils.udisks2.udisks2_dasbus import find_removable_media, loop_setup, filesystem_mount
-from win2go.winlib import get_windows_edition, WindowsEdition
+from win2go.utils.wimlib.wim_info import WIMInfo
+from win2go.utils.wimlib.wimlib import get_wim_info
+from win2go.utils.wimlib.windows_edition import WindowsEdition
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
@@ -24,6 +26,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
     image_file: LoopDevice
     block_device: BlockDevice
+    wim_info: WIMInfo
     windows_edition: WindowsEdition
 
     def __init__(self, *args, **kwargs):
@@ -48,10 +51,10 @@ class MainWindow(Gtk.ApplicationWindow):
         self.image_file = LoopDevice(loop_setup(iso_file))
         self.image_file.mount()
 
-        windows_editions_found = get_windows_edition(iso_file)
+        self.wim_info = get_wim_info(self.image_file.mount_path)
         self.windows_edition_drop_down.set_visible(True)
         self.windows_edition_drop_down.set_expression(get_edition_list_store_expression())
-        self.windows_edition_drop_down.set_model(build_windows_edition_model(windows_editions_found))
+        self.windows_edition_drop_down.set_model(build_windows_edition_model(self.wim_info))
         self.windows_edition_drop_down.connect("notify::selected-item", self.on_edition_selected)
 
     def on_block_device_selected_item(self, _drop_down, _selected_item):
@@ -59,5 +62,5 @@ class MainWindow(Gtk.ApplicationWindow):
         self.block_device = BlockDevice(selected_item.device_size, selected_item.device_model, selected_item.device_object)
 
     def on_edition_selected(self, _drop_down, _selected_item):
-        selected_item = _drop_down.get_selected_item()
-        self.windows_edition = WindowsEdition(selected_item.edition_name, selected_item.edition_index)
+        selected_item_index = _drop_down.get_selected()
+        self.windows_edition = self.wim_info.images[selected_item_index]
