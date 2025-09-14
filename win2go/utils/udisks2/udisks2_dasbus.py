@@ -87,7 +87,7 @@ def loop_setup(file: File) -> str | None:
             if sandbox_regex.match(file_path):  # File path is sandbox path, does not work!
                 return None
     except GLib.Error:
-        print("Can not get real path. Stuck with sandbox")
+        return None
     fd = os.open(file_path, os.O_RDONLY)
     readonly = GLib.Variant.new_byte(True)
     loop_path = proxy.LoopSetup(fd, {"read-only": readonly, }, )
@@ -107,7 +107,6 @@ def find_block_devices_for_drive(drive_path: str) -> List[str]:
 
 
 def setup_windows_drive(drive: Drive, callback: Callable = None):
-    print("Setting up drive {} for Windows...".format(drive.get_readable_drive_identification()))
     global selected_drive, setup_done_callback
     setup_done_callback = callback
     if selected_drive is None:
@@ -150,7 +149,6 @@ def _delete_partitions(call=None) -> None:
                               "org.freedesktop.UDisks2.PartitionTable")
 
     if len(proxy.Partitions) > 0:
-        print("Deleting partition " + proxy.Partitions[0] + "...")
         partition_proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
                                             proxy.Partitions[0],
                                             "org.freedesktop.UDisks2.Partition")
@@ -163,7 +161,6 @@ def _delete_partitions(call=None) -> None:
 
 
 def _create_boot_partition():
-    print("Creating BOOT partition...")
     proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
                               selected_drive.get_top_level_block_device(),
                               "org.freedesktop.UDisks2.PartitionTable")
@@ -187,12 +184,10 @@ def _create_boot_partition():
 def _callback_create_boot_partition(call):
     global windows_boot
     windows_boot = call()
-    print("BOOT created at " + windows_boot)
     _create_windows_main_partition()
 
 
 def _create_windows_main_partition():
-    print("Creating WINDOWS partition...")
     boot_proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
                                    windows_boot,
                                    "org.freedesktop.UDisks2.Partition")
@@ -225,7 +220,6 @@ def _create_windows_main_partition():
 def _callback_create_windows_main_partition(call):
     global windows_main, selected_drive
     windows_main = call()
-    print("WINDOWS created at " + windows_main)
     selected_drive = None
     if setup_done_callback is not None:
         setup_done_callback(windows_boot, windows_main)
