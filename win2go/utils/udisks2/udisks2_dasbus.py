@@ -6,6 +6,7 @@ from dasbus.connection import SystemMessageBus
 from dasbus.error import DBusError
 from dasbus.unix import GLibClientUnix
 from gi.overrides import GLib
+from gi.repository.GLib import Variant, VariantType
 from gi.repository.Gio import File, FileQueryInfoFlags
 
 from win2go.utils.udisks2.drive import Drive
@@ -96,6 +97,45 @@ def filesystem_mount(object_path: str) -> str:
 def find_block_devices_for_drive(drive_path: str) -> List[str]:
     return drive_to_block_devices[drive_path]
 
+
+def setup_windows_drive(drive: Drive):
+    proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
+                              drive.get_top_level_block_device(),
+                              "org.freedesktop.UDisks2.PartitionTable")
+
+    delete_partitions(proxy.Partitions)
+    print("Creating BOOT partition")
+    created_partition = create_fat32_partition(proxy)
+
+    print("Created partition {}".format(created_partition))
+
+def delete_partitions(partition_object_paths: List[str]) -> None:
+    for partition in partition_object_paths:
+        print("Deleting partition " + partition)
+        partition_proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
+                                            partition,
+                                            "org.freedesktop.UDisks2.Partition")
+        partition_proxy.Delete({})
+
+
+def create_fat32_partition(proxy) -> str:
+    variant_type = VariantType.new("s")
+    mkfs_args = GLib.Variant.new_array(variant_type, [Variant.new_string("-F"), Variant.new_string("32")])
+
+    offset = 0  # At start of device
+    size = 512 * 1024 * 1024  # 512 MiB
+    type_gpt = ""
+    name = "BOOT"
+    options = {}
+    format_type = "vfat"
+    format_options = {
+        "label": GLib.Variant.new_string("BOOT"),
+        "mkfs-args": mkfs_args,
+    }
+
+    return proxy.CreatePartitionAndFormat(
+        offset, size, type_gpt, name, options, format_type, format_options
+    )
 
 def _get_block_devices():
     proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",

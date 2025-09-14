@@ -9,7 +9,7 @@ from win2go.ui.windows_edition_item import get_edition_list_store_expression, bu
 from win2go.utils.udisks2.drive import Drive
 from win2go.utils.udisks2.loop_device import LoopDevice
 from win2go.utils.udisks2.udisks2_dasbus import find_removable_media, loop_setup, get_missing_filesystems, \
-    is_udisks2_supported
+    is_udisks2_supported, setup_windows_drive
 from win2go.utils.wimlib.wim_info import WIMInfo
 from win2go.utils.wimlib.wimlib import get_wim_info
 from win2go.utils.wimlib.windows_edition import WindowsEdition
@@ -205,3 +205,4 @@ class MainWindow(Gtk.ApplicationWindow):
 
     def _do_flash_for_real(self):
         print("Flashing...")
+        setup_windows_drive(self.selected_drive)
