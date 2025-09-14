@@ -3,6 +3,12 @@
   "runtime": "org.gnome.Platform",
   "runtime-version": "48",
   "sdk": "org.gnome.Sdk",
+  "sdk-extensions": [
+    "org.freedesktop.Sdk.Extension.ocaml"
+  ],
+  "build-options": {
+    "append-path": "/usr/lib/sdk/ocaml/bin"
+  },
   "command": "win2go",
   "finish-args": [
     "--socket=wayland",
@@ -24,19 +30,71 @@
   ],
   "modules": [
     {
-      "name": "winlib",
-      "builddir": true,
+      "name": "perl",
+      "no-autogen": true,
+      "post-install": [
+        "find /app/lib/perl5/ -name \"*.so\" -exec chmod 755 {} \\;"
+      ],
+       "cleanup": [
+        "/bin",
+        "/man",
+        "/lib/perl5/site_perl",
+        "*.pod",
+        "*.h"
+      ],
       "sources": [
         {
           "type": "archive",
-          "url": "https://wimlib.net/downloads/wimlib-1.14.4.tar.gz",
-          "sha256": "3633db2b6c8b255eb86d3bf3df3059796bd1f08e50b8c9728c7eb66662e51300"
+          "url": "https://www.cpan.org/src/5.0/perl-5.42.0.tar.gz",
+          "sha256": "e093ef184d7f9a1b9797e2465296f55510adb6dab8842b0c3ed53329663096dc"
+        },
+        {
+          "type": "script",
+          "dest-filename": "configure",
+          "commands": [
+            "exec ./configure.gnu $@"
+          ]
         }
+      ]
+    },
+    {
+      "name": "perl-io-stringy",
+      "no-autogen": true,
+      "buildsystem": "simple",
+      "build-commands": [
+        "perl Makefile.PL",
+        "make",
+        "make install"
       ],
-      "config-opts": [
-        "-disable-static",
-        "-without-fuse",
-        "-without-ntfs-3g"
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://cpan.metacpan.org/authors/id/D/DS/DSKOLL/IO-stringy-2.111.tar.gz",
+          "sha256": "8c67fd6608c3c4e74f7324f1404a856c331dbf48d9deda6aaa8296ea41bf199d"
+        }
+      ]
+    },
+    {
+      "name": "hivex",
+      "builddir": true,
+      "buildsystem": "simple",
+      "post-install": [
+        "find /app/lib/perl5/ -name \"*.so\" -exec chmod 755 {} \\;"
+      ],
+      "build-commands": [
+        "autoreconf -i",
+        "./generator/generator.ml",
+        "./configure --prefix=${FLATPAK_DEST} --disable-python --disable-ruby",
+        "make",
+        "make check",
+        "make install"
+      ],
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://github.com/libguestfs/hivex",
+          "tag": "v1.3.24"
+        }
       ]
     },
     {
@@ -92,6 +150,22 @@
           "url": "https://gitlab.gnome.org/GNOME/blueprint-compiler",
           "tag": "v0.18.0"
         }
+      ]
+    },
+    {
+      "name": "winlib",
+      "builddir": true,
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://wimlib.net/downloads/wimlib-1.14.4.tar.gz",
+          "sha256": "3633db2b6c8b255eb86d3bf3df3059796bd1f08e50b8c9728c7eb66662e51300"
+        }
+      ],
+      "config-opts": [
+        "-disable-static",
+        "-without-fuse",
+        "-without-ntfs-3g"
       ]
     },
     {
