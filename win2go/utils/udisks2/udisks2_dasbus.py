@@ -19,6 +19,8 @@ supported_file_systems = []
 sandbox_regex = re.compile('/run/user/[1-9][0-9]*/doc/[a-z0-9]*/.*')
 
 selected_drive: Drive | None = None
+windows_boot: str = ""
+windows_main: str = ""
 
 
 def is_udisks2_supported() -> bool:
@@ -145,7 +147,6 @@ def _delete_partitions() -> None:
 
 
 def _callback_delete_partition(call) -> None:
-    print(call)
     _create_boot_partition()
 
 
@@ -174,7 +175,8 @@ def _create_boot_partition() -> str:
 
 
 def _callback_create_boot_partition(call) -> None:
-    print(call)
+    global windows_boot
+    windows_boot = call()
 
 
 _get_block_devices()
