@@ -1,3 +1,4 @@
+import asyncio
 import subprocess
 
 from win2go.utils.wimlib.wim_info import WIMInfo
@@ -115,3 +116,23 @@ def build_wiminfo(wim_dict: dict) -> WIMInfo:
     size = int(size_split[0])
     attributes = wim_header["Attributes"]
     return WIMInfo(path, guid, version, img_count, compression, chunk_size, part_number, size, boot_index, attributes, images)
+
+async def apply_windows_edition(mount_path: str, wiminfo: WIMInfo, windows_edition: WindowsEdition):
+    wim_image_path = wiminfo.path
+
+    wimlib_cmd = "wimlib-imagex apply {image} {index} {mount} --no-acls --no-attributes --include-invalid-names".format(
+        image=wim_image_path,
+        index=windows_edition.index,
+        mount=mount_path
+    )
+
+    process = await asyncio.create_subprocess_shell(wimlib_cmd,
+                                                    stdout=asyncio.subprocess.PIPE,
+                                                    stderr=asyncio.subprocess.PIPE)
+
+    stdout, stderr = await process.communicate()
+    print("Apply boot image done. Exit code: {}".format(process.returncode))
+    if stdout:
+        print(f'[stdout]\n{stdout.decode()}')
+    if stderr:
+        print(f'[stderr]\n{stderr.decode()}')

@@ -1,3 +1,4 @@
+import asyncio
 import sys
 from typing import List
 
@@ -11,7 +12,7 @@ from win2go.utils.udisks2.loop_device import LoopDevice
 from win2go.utils.udisks2.udisks2_dasbus import find_removable_media, loop_setup, get_missing_filesystems, \
     is_udisks2_supported, setup_windows_drive, mount_filesystem
 from win2go.utils.wimlib.wim_info import WIMInfo
-from win2go.utils.wimlib.wimlib import get_wim_info
+from win2go.utils.wimlib.wimlib import get_wim_info, apply_windows_edition
 from win2go.utils.wimlib.windows_edition import WindowsEdition
 
 gi.require_version("Gtk", "4.0")
@@ -81,6 +82,7 @@ class MainWindow(Gtk.ApplicationWindow):
             self.image_file = LoopDevice(loop_path)
             self.image_file.mount()
             self.wim_info = get_wim_info(self.image_file.mount_path)
+            self.selected_windows_edition = self.wim_info.images[0]
             self.windows_edition_drop_down.set_visible(True)
             self.windows_edition_drop_down.set_expression(get_edition_list_store_expression())
             self.windows_edition_drop_down.set_model(build_windows_edition_model(self.wim_info))
@@ -208,6 +210,6 @@ class MainWindow(Gtk.ApplicationWindow):
         setup_windows_drive(self.selected_drive, callback=self._drive_prepared_callback)
 
     def _drive_prepared_callback(self, block_boot, block_windows):
-        print("Drive was setup. Boot: {} Main: {}".format(block_boot, block_windows))
-        mount_filesystem(block_boot)
-        mount_filesystem(block_windows)
+        boot_mount_path = mount_filesystem(block_boot)
+        main_mount_path = mount_filesystem(block_windows)
+        asyncio.run(apply_windows_edition(main_mount_path, self.wim_info, self.selected_windows_edition))
