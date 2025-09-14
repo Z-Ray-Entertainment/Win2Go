@@ -116,6 +116,11 @@ def setup_windows_drive(drive: Drive, callback: Callable = None):
     else:
         print("Operation in progress")
 
+def mount_filesystem(block_device: str):
+    proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
+                              block_device,
+                              "org.freedesktop.UDisks2.Filesystem")
+    proxy.Mount({})
 
 def _get_block_devices():
     proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
@@ -218,12 +223,12 @@ def _create_windows_main_partition():
 
 
 def _callback_create_windows_main_partition(call):
-    global windows_main, selected_drive, windows_drive_created
+    global windows_main, selected_drive
     windows_main = call()
     print("WINDOWS created at " + windows_main)
     selected_drive = None
     if setup_done_callback is not None:
-        setup_done_callback()
+        setup_done_callback(windows_boot, windows_main)
 
 _get_block_devices()
 _get_supported_filesystems()
