@@ -17,6 +17,7 @@ supported_file_systems = []
 
 sandbox_regex = re.compile('/run/user/[0-9]*/doc/[a-z0-9]*/.*')
 
+
 def is_udisks2_supported() -> bool:
     try:
         proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
@@ -27,6 +28,7 @@ def is_udisks2_supported() -> bool:
     except DBusError:
         print("Udisks2 not supported on this system")
         return False
+
 
 def get_missing_filesystems(fs_to_look_up: List[str]) -> List[str]:
     missing_fs = []
