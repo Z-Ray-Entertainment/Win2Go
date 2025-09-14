@@ -8,7 +8,8 @@ from win2go.ui.block_device_item import get_list_store_expression, build_block_d
 from win2go.ui.windows_edition_item import get_edition_list_store_expression, build_windows_edition_model
 from win2go.utils.udisks2.drive import Drive
 from win2go.utils.udisks2.loop_device import LoopDevice
-from win2go.utils.udisks2.udisks2_dasbus import find_removable_media, loop_setup, get_missing_filesystems
+from win2go.utils.udisks2.udisks2_dasbus import find_removable_media, loop_setup, get_missing_filesystems, \
+    is_udisks2_supported
 from win2go.utils.wimlib.wim_info import WIMInfo
 from win2go.utils.wimlib.wimlib import get_wim_info
 from win2go.utils.wimlib.windows_edition import WindowsEdition
@@ -19,12 +20,8 @@ from gi.repository import Gtk, Adw
 from gi.repository.Gtk import DropDown, Button, FileFilter, TextView
 
 
-def _on_close_filesystem_error(_dialog, result):
+def _on_close_error_and_exit(_dialog, result):
     sys.exit(1)
-
-
-def _on_close_sandbox_error(self, _dialog, task):
-    pass
 
 
 @Gtk.Template(resource_path="/de/z_ray/win2go/blp/main_window.ui")
@@ -48,23 +45,26 @@ class MainWindow(Gtk.ApplicationWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        missing_fs = get_missing_filesystems(["ntfs", "udf"])
-        if len(missing_fs) > 0:
-            self._create_error_unsupported_filesystem_dialog(missing_fs)
+        if not is_udisks2_supported():
+            self._create_error_udisks2_not_supported()
         else:
-            self.all_removable_drives = find_removable_media()
-            if len(self.all_removable_drives) > 0:
-                self.selected_drive = self.all_removable_drives[0]
+            missing_fs = get_missing_filesystems(["ntfs", "udf"])
+            if len(missing_fs) > 0:
+                self._create_error_unsupported_filesystem_dialog(missing_fs)
             else:
-                self.selected_drive = None
+                self.all_removable_drives = find_removable_media()
+                if len(self.all_removable_drives) > 0:
+                    self.selected_drive = self.all_removable_drives[0]
+                else:
+                    self.selected_drive = None
 
-            self.device_drop_down.set_expression(get_list_store_expression())
-            self.device_drop_down.set_model(build_block_device_model(self.all_removable_drives))
-            self.device_drop_down.connect("notify::selected-item", self.on_block_device_selected_item)
+                self.device_drop_down.set_expression(get_list_store_expression())
+                self.device_drop_down.set_model(build_block_device_model(self.all_removable_drives))
+                self.device_drop_down.connect("notify::selected-item", self.on_block_device_selected_item)
 
-            self.open_iso.connect("clicked", lambda *_: self.open_image())
-            self.bt_about.connect("clicked", self._open_about)
-            self._update_changes()
+                self.open_iso.connect("clicked", lambda *_: self.open_image())
+                self.bt_about.connect("clicked", self._open_about)
+                self._update_changes()
 
     def open_image(self):
         Gtk.FileDialog(default_filter=self.file_filter_image).open(self, None, self.on_image_opened)
@@ -93,6 +93,16 @@ class MainWindow(Gtk.ApplicationWindow):
         selected_item_index = _drop_down.get_selected()
         self.selected_windows_edition = self.wim_info.images[selected_item_index]
 
+    def _create_error_udisks2_not_supported(self):
+        dialog = Adw.AlertDialog(
+            heading=_("UDisks2 Error"),
+            body=_("This system does not support UDisks2."),
+            close_response="okay",
+        )
+
+        dialog.add_response("okay", _("Okay"))
+        dialog.choose(self, None, _on_close_error_and_exit)
+
     def _create_error_sandbox_path_dialog(self, *_args):
         dialog = Adw.AlertDialog(
             heading=_("Sandbox Error"),
@@ -103,7 +113,7 @@ class MainWindow(Gtk.ApplicationWindow):
         )
 
         dialog.add_response("okay", _("Okay"))
-        dialog.choose(self, None, self._on_close_sandbox_error)
+        dialog.choose(self, None, _on_close_error_and_exit)
 
     def _create_error_unsupported_filesystem_dialog(self, missing_fs):
         dialog = Adw.AlertDialog(
@@ -113,7 +123,7 @@ class MainWindow(Gtk.ApplicationWindow):
         )
 
         dialog.add_response("okay", _("Okay"))
-        dialog.choose(self, None, _on_close_filesystem_error)
+        dialog.choose(self, None, _on_close_error_and_exit)
 
     def _open_about(self, _widget):
         dialog = Adw.AboutDialog(
