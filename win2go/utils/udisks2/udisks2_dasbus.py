@@ -15,7 +15,7 @@ sys_bus = SystemMessageBus()
 drive_to_block_devices = {}
 supported_file_systems = []
 
-sandbox_regex = re.compile('/run/user/[0-9]*/doc/[a-zA-Z0-9]*/.*')
+sandbox_regex = re.compile('/run/user/[0-9]*/doc/[a-z0-9]*/.*')
 
 
 def get_missing_filesystems(fs_to_look_up: List[str]) -> List[str]:
