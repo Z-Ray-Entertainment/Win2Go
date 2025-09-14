@@ -1,5 +1,6 @@
 import os
 import re
+from collections.abc import Callable
 from typing import List
 
 from dasbus.connection import SystemMessageBus
@@ -23,6 +24,8 @@ sandbox_regex = re.compile('/run/user/[1-9][0-9]*/doc/[a-z0-9]*/.*')
 selected_drive: Drive | None = None
 windows_boot: str = ""
 windows_main: str = ""
+windows_drive_created = False
+setup_done_callback: Callable
 
 
 def is_udisks2_supported() -> bool:
@@ -104,9 +107,10 @@ def find_block_devices_for_drive(drive_path: str) -> List[str]:
     return drive_to_block_devices[drive_path]
 
 
-def setup_windows_drive(drive: Drive):
+def setup_windows_drive(drive: Drive, callback: Callable = None):
     print("Setting up drive {} for Windows...".format(drive.get_readable_drive_identification()))
-    global selected_drive
+    global selected_drive, setup_done_callback
+    setup_done_callback = callback
     if selected_drive is None:
         selected_drive = drive
         _delete_partitions()
@@ -215,9 +219,13 @@ def _create_windows_main_partition():
 
 
 def _callback_create_windows_main_partition(call):
-    global windows_main
+    global windows_main, selected_drive, windows_drive_created
     windows_main = call()
     print("WINDOWS created at " + windows_main)
+    selected_drive = None
+    windows_drive_created = True
+    if setup_done_callback is not None:
+        setup_done_callback()
 
 _get_block_devices()
 _get_supported_filesystems()

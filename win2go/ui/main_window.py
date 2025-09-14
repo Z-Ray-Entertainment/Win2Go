@@ -205,4 +205,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
     def _do_flash_for_real(self):
         print("Flashing...")
-        setup_windows_drive(self.selected_drive)
+        setup_windows_drive(self.selected_drive, callback=self._drive_prepared_callback)
+
+    def _drive_prepared_callback(self):
+        print("Drive was setup")
