@@ -34,7 +34,7 @@ class MainWindow(Gtk.ApplicationWindow):
     all_removable_drives: List[Drive]
     wim_info: WIMInfo
     selected_windows_edition: WindowsEdition
-    selected_drive: Drive
+    selected_drive: Drive | None
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -42,6 +42,8 @@ class MainWindow(Gtk.ApplicationWindow):
         self.all_removable_drives = find_removable_media()
         if len(self.all_removable_drives) > 0:
             self.selected_drive = self.all_removable_drives[0]
+        else:
+            self.selected_drive = None
 
         self.device_drop_down.set_expression(get_list_store_expression())
         self.device_drop_down.set_model(build_block_device_model(self.all_removable_drives))
