@@ -40,11 +40,39 @@
       ]
     },
     {
+      "name": "bcd-sys",
+      "buildsystem": "simple",
+      "build-commands": [
+        "mkdir -p ${FLATPAK_DEST}/share/BCD-SYS/Resources",
+        "install Linux/bcd-sys.sh ${FLATPAK_DEST}/bin/bcd-sys",
+        "install Linux/recovery.sh ${FLATPAK_DEST}/share/BCD-SYS",
+        "install Linux/update_device.sh ${FLATPAK_DEST}/share/BCD-SYS",
+        "install Linux/wbmfwvar.sh ${FLATPAK_DEST}/share/BCD-SYS",
+        "install Linux/winload.sh ${FLATPAK_DEST}/share/BCD-SYS",
+        "install Resources/attach-vhdx.sh ${FLATPAK_DEST}/bin/attach-vhdx",
+        "install Resources/detach-vhdx.sh ${FLATPAK_DEST}/bin/detach-vhdx",
+        "cp Resources/*.txt ${FLATPAK_DEST}/share/BCD-SYS/Resources",
+        "cp -r Templates ${FLATPAK_DEST}/share/BCD-SYS",
+        "perl -i -pe\"s|resdir=\\\".\\\"|resdir=\\\"${FLATPAK_DEST}/share/BCD-SYS\\\"|\" ${FLATPAK_DEST}/bin/bcd-sys",
+        "perl -i -pe\"s|tmpdir=\\\".\\\"|tmpdir=\\\"/tmp\\\"|\" ${FLATPAK_DEST}/bin/bcd-sys",
+        "perl -i -pe\"s|resdir=\\\".\\\"|resdir=\\\"${FLATPAK_DEST}/share/BCD-SYS\\\"|\" ${FLATPAK_DEST}/share/BCD-SYS/recovery.sh",
+        "perl -i -pe\"s|resdir=\\\".\\\"|resdir=\\\"${FLATPAK_DEST}/share/BCD-SYS\\\"|\" ${FLATPAK_DEST}/share/BCD-SYS/winload.sh"
+      ],
+      "builddir": true,
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://github.com/jpz4085/BCD-SYS",
+          "tag": "v2.1"
+        }
+      ]
+    },
+    {
       "name": "dasbus",
       "buildsystem": "simple",
-        "build-commands": [
+      "build-commands": [
             "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} . --no-build-isolation"
-        ],
+      ],
       "builddir": true,
       "sources": [
         {
