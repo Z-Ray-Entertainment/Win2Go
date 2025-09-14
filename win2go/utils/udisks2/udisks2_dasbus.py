@@ -6,7 +6,7 @@ from dasbus.connection import SystemMessageBus
 from dasbus.error import DBusError
 from dasbus.unix import GLibClientUnix
 from gi.overrides import GLib
-from gi.repository.GLib import Variant, VariantType
+from gi.repository.GLib import VariantType
 from gi.repository.Gio import File, FileQueryInfoFlags
 
 from win2go.utils.udisks2.drive import Drive
@@ -161,21 +161,18 @@ def _create_boot_partition():
                               "org.freedesktop.UDisks2.PartitionTable")
 
     variant_type = VariantType.new("s")
-    mkfs_args = GLib.Variant.new_array(variant_type, [Variant.new_string("-F"), Variant.new_string("32")])
+    mkfs_args = GLib.Variant.new_array(variant_type, [
+        GLib.Variant.new_string("-F"),
+        GLib.Variant.new_string("32")
+    ])
 
-    offset = 0  # At start of device
-    size = BOOT_SIZE  # 512 MiB
-    type_gpt = ""
-    name = "BOOT"
-    options = {}
-    format_type = "vfat"
     format_options = {
         "label": GLib.Variant.new_string("BOOT"),
         "mkfs-args": mkfs_args,
     }
 
     proxy.CreatePartitionAndFormat(
-        offset, size, type_gpt, name, options, format_type, format_options, callback=_callback_create_boot_partition
+        0, BOOT_SIZE, "", "BOOT", {}, "vfat", format_options, callback=_callback_create_boot_partition
     )
 
 
@@ -194,14 +191,26 @@ def _create_windows_main_partition():
     boot_offset = boot_proxy.Offset
     boot_size = boot_proxy.Size
 
+    block_proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
+                                   selected_drive.get_top_level_block_device(),
+                                   "org.freedesktop.UDisks2.Block")
+    block_size = block_proxy.Size
+
+    variant_type = VariantType.new("s")
+    mkfs_args = GLib.Variant.new_array(variant_type, [
+        GLib.Variant.new_string("-f"),
+        GLib.Variant.new_string("-c"),
+        GLib.Variant.new_string("4096")
+    ])
+
     offset = boot_offset + boot_size + 1  # After BOOT
-    size = 0  # All remaining space
-    type_gpt = ""
-    name = "WINDOWS"
-    options = {}
-    format_type = "ntfs"
+    size = block_size - offset  # All remaining space
+    options = {
+        "partition-type": GLib.Variant.new_string(string="primary")
+    }
     format_options = {
         "label": GLib.Variant.new_string("WINDOWS"),
+        "mkfs-args": mkfs_args,
     }
 
     proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
@@ -209,7 +218,7 @@ def _create_windows_main_partition():
                               "org.freedesktop.UDisks2.PartitionTable")
 
     proxy.CreatePartitionAndFormat(
-        offset, size, type_gpt, name, options, format_type, format_options, callback=_callback_create_boot_partition
+        offset, size, "", "WINDOWS", options, "ntfs", format_options, callback=_callback_create_boot_partition
     )
     # TODO: Error creating partition on /dev/sdX: Failed to add new partition to the table: Numerical result out of range
 
