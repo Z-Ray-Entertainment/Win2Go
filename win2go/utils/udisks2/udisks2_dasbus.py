@@ -18,6 +18,8 @@ supported_file_systems = []
 
 sandbox_regex = re.compile('/run/user/[1-9][0-9]*/doc/[a-z0-9]*/.*')
 
+selected_drive: Drive | None = None
+
 
 def is_udisks2_supported() -> bool:
     try:
@@ -99,43 +101,13 @@ def find_block_devices_for_drive(drive_path: str) -> List[str]:
 
 
 def setup_windows_drive(drive: Drive):
-    proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
-                              drive.get_top_level_block_device(),
-                              "org.freedesktop.UDisks2.PartitionTable")
+    global selected_drive
+    if selected_drive is None:
+        selected_drive = drive
+        _delete_partitions()
+    else:
+        print("Operation in progress")
 
-    delete_partitions(proxy.Partitions)
-    print("Creating BOOT partition")
-    created_partition = create_fat32_partition(proxy)
-
-    print("Created partition {}".format(created_partition))
-
-def delete_partitions(partition_object_paths: List[str]) -> None:
-    for partition in partition_object_paths:
-        print("Deleting partition " + partition)
-        partition_proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
-                                            partition,
-                                            "org.freedesktop.UDisks2.Partition")
-        partition_proxy.Delete({})
-
-
-def create_fat32_partition(proxy) -> str:
-    variant_type = VariantType.new("s")
-    mkfs_args = GLib.Variant.new_array(variant_type, [Variant.new_string("-F"), Variant.new_string("32")])
-
-    offset = 0  # At start of device
-    size = 512 * 1024 * 1024  # 512 MiB
-    type_gpt = ""
-    name = "BOOT"
-    options = {}
-    format_type = "vfat"
-    format_options = {
-        "label": GLib.Variant.new_string("BOOT"),
-        "mkfs-args": mkfs_args,
-    }
-
-    return proxy.CreatePartitionAndFormat(
-        offset, size, type_gpt, name, options, format_type, format_options
-    )
 
 def _get_block_devices():
     proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
@@ -157,6 +129,52 @@ def _get_supported_filesystems():
     proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
                               "/org/freedesktop/UDisks2/Manager")
     supported_file_systems = proxy.SupportedFilesystems
+
+
+def _delete_partitions() -> None:
+    proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
+                              selected_drive.get_top_level_block_device(),
+                              "org.freedesktop.UDisks2.PartitionTable")
+
+    for partition in proxy.Partitions:
+        print("Deleting partition " + partition)
+        partition_proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
+                                            partition,
+                                            "org.freedesktop.UDisks2.Partition")
+        partition_proxy.Delete({}, callback=_callback_delete_partition)
+
+
+def _callback_delete_partition(call) -> None:
+    print(call)
+    _create_boot_partition()
+
+
+def _create_boot_partition() -> str:
+    proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
+                              selected_drive.get_top_level_block_device(),
+                              "org.freedesktop.UDisks2.PartitionTable")
+
+    variant_type = VariantType.new("s")
+    mkfs_args = GLib.Variant.new_array(variant_type, [Variant.new_string("-F"), Variant.new_string("32")])
+
+    offset = 0  # At start of device
+    size = 512 * 1024 * 1024  # 512 MiB
+    type_gpt = ""
+    name = "BOOT"
+    options = {}
+    format_type = "vfat"
+    format_options = {
+        "label": GLib.Variant.new_string("BOOT"),
+        "mkfs-args": mkfs_args,
+    }
+
+    return proxy.CreatePartitionAndFormat(
+        offset, size, type_gpt, name, options, format_type, format_options, callback=_callback_create_boot_partition
+    )
+
+
+def _callback_create_boot_partition(call) -> None:
+    print(call)
 
 
 _get_block_devices()
