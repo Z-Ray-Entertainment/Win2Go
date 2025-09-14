@@ -7,12 +7,14 @@ from win2go.utils.wimlib.windows_edition import WindowsEdition
 def create_windows(device_name, image_index, iso_file):
     pass
 
+
 def get_wim_info(iso_mount_path: str) -> WIMInfo:
     return build_wiminfo(
         parse_image_definitions(
             iso_mount_path + "/sources/install.wim"
         )
     )
+
 
 def parse_image_definitions(path: str) -> dict:
     full_image_info = {}
@@ -58,6 +60,7 @@ def parse_image_definitions(path: str) -> dict:
     full_image_info["images"] = images
 
     return full_image_info
+
 
 def build_wiminfo(wim_dict: dict) -> WIMInfo:
     images = []
