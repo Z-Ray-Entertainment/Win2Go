@@ -17,8 +17,13 @@ supported_file_systems = []
 
 sandbox_regex = re.compile('/run/user/[0-9]*/doc/[a-zA-Z0-9]*/.*')
 
-def does_system_support_required_filesystems() -> bool:
-    return "ntfs" in supported_file_systems and "udf" in supported_file_systems
+
+def get_missing_filesystems(fs_to_look_up: List[str]) -> List[str]:
+    missing_fs = []
+    for fs in fs_to_look_up:
+        if fs not in supported_file_systems:
+            missing_fs.append(fs)
+    return missing_fs
 
 
 def get_managed_objects() -> List[str]:
@@ -52,14 +57,14 @@ def loop_setup(file: File) -> str | None:
                               "org.freedesktop.UDisks2.Manager",
                               client=GLibClientUnix)
 
-    file_path = file.get_path() # Sandbox path, as fallback
+    file_path = file.get_path()  # Sandbox path, as fallback
     try:
         file_info = file.query_info("xattr::document-portal.host-path", FileQueryInfoFlags.NONE, None)
         real_path = file_info.get_attribute_string("xattr::document-portal.host-path")
-        if real_path is not None: # Is None if attribute does not exist
+        if real_path is not None:  # Is None if attribute does not exist
             file_path = real_path
         else:
-            if sandbox_regex.match(file_path): # File path is sandbox path, does not work!
+            if sandbox_regex.match(file_path):  # File path is sandbox path, does not work!
                 return None
     except GLib.Error:
         print("Can not get real path. Stuck with sandbox")
