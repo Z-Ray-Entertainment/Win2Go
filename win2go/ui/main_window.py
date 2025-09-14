@@ -49,7 +49,7 @@ class MainWindow(Gtk.ApplicationWindow):
         if not is_udisks2_supported():
             self._create_error_udisks2_not_supported()
         else:
-            missing_fs = get_missing_filesystems(["ntfs", "udf"])
+            missing_fs = get_missing_filesystems(["ntfs", "udf", "vfat"])
             if len(missing_fs) > 0:
                 self._create_error_unsupported_filesystem_dialog(missing_fs)
             else:
