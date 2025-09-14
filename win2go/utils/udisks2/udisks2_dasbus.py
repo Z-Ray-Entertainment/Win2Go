@@ -15,7 +15,7 @@ sys_bus = SystemMessageBus()
 drive_to_block_devices = {}
 supported_file_systems = []
 
-sandbox_regex = re.compile('/run/user/[0-9]*/doc/[a-z0-9]*/.*')
+sandbox_regex = re.compile('/run/user/[1-9][0-9]*/doc/[a-z0-9]*/.*')
 
 
 def is_udisks2_supported() -> bool:
