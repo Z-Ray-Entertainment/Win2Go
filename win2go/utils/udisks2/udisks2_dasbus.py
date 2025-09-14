@@ -26,7 +26,6 @@ def is_udisks2_supported() -> bool:
         proxy.Ping()
         return True
     except DBusError:
-        print("Udisks2 not supported on this system")
         return False
 
 
