@@ -211,6 +211,7 @@ def _create_windows_main_partition():
     proxy.CreatePartitionAndFormat(
         offset, size, type_gpt, name, options, format_type, format_options, callback=_callback_create_boot_partition
     )
+    # TODO: Error creating partition on /dev/sdX: Failed to add new partition to the table: Numerical result out of range
 
 
 def _callback_create_windows_main_partition(call):
