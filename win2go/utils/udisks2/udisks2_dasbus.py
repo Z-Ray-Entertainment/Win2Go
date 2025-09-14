@@ -24,7 +24,6 @@ sandbox_regex = re.compile('/run/user/[1-9][0-9]*/doc/[a-z0-9]*/.*')
 selected_drive: Drive | None = None
 windows_boot: str = ""
 windows_main: str = ""
-windows_drive_created = False
 setup_done_callback: Callable
 
 
@@ -223,7 +222,6 @@ def _callback_create_windows_main_partition(call):
     windows_main = call()
     print("WINDOWS created at " + windows_main)
     selected_drive = None
-    windows_drive_created = True
     if setup_done_callback is not None:
         setup_done_callback()
 
