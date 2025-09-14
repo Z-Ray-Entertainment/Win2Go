@@ -18,6 +18,10 @@ from gi.repository import Gtk, Adw
 from gi.repository.Gtk import DropDown, Button, FileFilter, TextView
 
 
+def _on_close_sandbox_error(self, _dialog, task):
+    pass
+
+
 @Gtk.Template(resource_path="/de/z_ray/win2go/blp/main_window.ui")
 class MainWindow(Gtk.ApplicationWindow):
     __gtype_name__ = "Win2GoMainWindow"
@@ -83,15 +87,15 @@ class MainWindow(Gtk.ApplicationWindow):
     def _create_error_sandbox_path_dialog(self, *_args):
         dialog = Adw.AlertDialog(
             heading=_("Sandbox Error"),
-            body=_("Win2Go can not access the image file. Please allow user home directory access manually. Or update to xdg-desktop-portal 1.20."),
+            body=_(
+                "Win2Go can not retrieve the real image file path. Please allow user home directory access manually." +
+                "Or update to xdg-desktop-portal 1.20."),
             close_response="okay",
         )
 
         dialog.add_response("okay", _("Okay"))
         dialog.choose(self, None, self._on_close_sandbox_error)
 
-    def _on_close_sandbox_error(self, _dialog, task):
-        pass
 
     def _open_about(self, _widget):
         dialog = Adw.AboutDialog(
