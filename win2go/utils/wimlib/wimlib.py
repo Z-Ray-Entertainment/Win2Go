@@ -56,6 +56,9 @@ def parse_image_definitions(path: str) -> dict:
                     line_split = line.split(":")
                     current_image[line_split[0].strip()] = line_split[1].strip()
         skip_line = False
+    if current_image:
+        images.append(current_image)
+        current_image = {}
 
     full_image_info["wiminfo"] = wiminfo
     full_image_info["images"] = images
