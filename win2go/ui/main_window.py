@@ -100,8 +100,9 @@ class MainWindow(Gtk.ApplicationWindow):
             close_response="okay",
         )
 
-        dialog.add_response("okay", _("Okay"))
+        dialog.add_response("close", _("Close"))
         dialog.choose(self, None, _on_close_error_and_exit)
+        dialog.set_response_appearance("close", Adw.ResponseAppearance.DESTRUCTIVE)
 
     def _create_error_sandbox_path_dialog(self, *_args):
         dialog = Adw.AlertDialog(
@@ -112,8 +113,9 @@ class MainWindow(Gtk.ApplicationWindow):
             close_response="okay",
         )
 
-        dialog.add_response("okay", _("Okay"))
+        dialog.add_response("close", _("Close"))
         dialog.choose(self, None, _on_close_error_and_exit)
+        dialog.set_response_appearance("close", Adw.ResponseAppearance.DESTRUCTIVE)
 
     def _create_error_unsupported_filesystem_dialog(self, missing_fs):
         dialog = Adw.AlertDialog(
@@ -122,8 +124,9 @@ class MainWindow(Gtk.ApplicationWindow):
             close_response="okay",
         )
 
-        dialog.add_response("okay", _("Okay"))
+        dialog.add_response("close", _("Close"))
         dialog.choose(self, None, _on_close_error_and_exit)
+        dialog.set_response_appearance("close", Adw.ResponseAppearance.DESTRUCTIVE)
 
     def _open_about(self, _widget):
         dialog = Adw.AboutDialog(
