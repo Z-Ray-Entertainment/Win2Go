@@ -11,6 +11,8 @@ from gi.repository.Gio import File, FileQueryInfoFlags
 
 from win2go.utils.udisks2.drive import Drive
 
+BOOT_SIZE = 512 * 1024 * 1024
+
 sys_bus = SystemMessageBus()
 
 drive_to_block_devices = {}
@@ -103,6 +105,7 @@ def find_block_devices_for_drive(drive_path: str) -> List[str]:
 
 
 def setup_windows_drive(drive: Drive):
+    print("Setting up drive {} for Windows...".format(drive.get_readable_drive_identification()))
     global selected_drive
     if selected_drive is None:
         selected_drive = drive
@@ -133,24 +136,26 @@ def _get_supported_filesystems():
     supported_file_systems = proxy.SupportedFilesystems
 
 
-def _delete_partitions() -> None:
+def _delete_partitions(call=None) -> None:
     proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
                               selected_drive.get_top_level_block_device(),
                               "org.freedesktop.UDisks2.PartitionTable")
 
-    for partition in proxy.Partitions:
-        print("Deleting partition " + partition)
+    if len(proxy.Partitions) > 0:
+        print("Deleting partition " + proxy.Partitions[0] + "...")
         partition_proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
-                                            partition,
+                                            proxy.Partitions[0],
                                             "org.freedesktop.UDisks2.Partition")
-        partition_proxy.Delete({}, callback=_callback_delete_partition)
+        try:
+            partition_proxy.Delete({}, callback=_delete_partitions)
+        except DBusError as e:
+            print(e)
+    else:
+        _create_boot_partition()
 
 
-def _callback_delete_partition(call) -> None:
-    _create_boot_partition()
-
-
-def _create_boot_partition() -> str:
+def _create_boot_partition():
+    print("Creating BOOT partition...")
     proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
                               selected_drive.get_top_level_block_device(),
                               "org.freedesktop.UDisks2.PartitionTable")
@@ -159,7 +164,7 @@ def _create_boot_partition() -> str:
     mkfs_args = GLib.Variant.new_array(variant_type, [Variant.new_string("-F"), Variant.new_string("32")])
 
     offset = 0  # At start of device
-    size = 512 * 1024 * 1024  # 512 MiB
+    size = BOOT_SIZE  # 512 MiB
     type_gpt = ""
     name = "BOOT"
     options = {}
@@ -169,15 +174,49 @@ def _create_boot_partition() -> str:
         "mkfs-args": mkfs_args,
     }
 
-    return proxy.CreatePartitionAndFormat(
+    proxy.CreatePartitionAndFormat(
         offset, size, type_gpt, name, options, format_type, format_options, callback=_callback_create_boot_partition
     )
 
 
-def _callback_create_boot_partition(call) -> None:
+def _callback_create_boot_partition(call):
     global windows_boot
     windows_boot = call()
+    print("BOOT created at " + windows_boot)
+    _create_windows_main_partition()
 
+
+def _create_windows_main_partition():
+    print("Creating WINDOWS partition...")
+    boot_proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
+                                   windows_boot,
+                                   "org.freedesktop.UDisks2.Partition")
+    boot_offset = boot_proxy.Offset
+    boot_size = boot_proxy.Size
+
+    offset = boot_offset + boot_size + 1  # After BOOT
+    size = 0  # All remaining space
+    type_gpt = ""
+    name = "WINDOWS"
+    options = {}
+    format_type = "ntfs"
+    format_options = {
+        "label": GLib.Variant.new_string("WINDOWS"),
+    }
+
+    proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
+                              selected_drive.get_top_level_block_device(),
+                              "org.freedesktop.UDisks2.PartitionTable")
+
+    proxy.CreatePartitionAndFormat(
+        offset, size, type_gpt, name, options, format_type, format_options, callback=_callback_create_boot_partition
+    )
+
+
+def _callback_create_windows_main_partition(call):
+    global windows_main
+    windows_main = call()
+    print("WINDOWS created at " + windows_main)
 
 _get_block_devices()
 _get_supported_filesystems()
