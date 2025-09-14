@@ -33,6 +33,7 @@ class MainWindow(Gtk.ApplicationWindow):
     file_filter_image: FileFilter = Gtk.Template.Child()
     windows_edition_drop_down: DropDown = Gtk.Template.Child()
     text_view_changes: TextView = Gtk.Template.Child()
+    bt_flash: Button = Gtk.Template.Child()
 
     file_dialog: Gtk.FileDialog
 
@@ -64,6 +65,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
                 self.open_iso.connect("clicked", lambda *_: self.open_image())
                 self.bt_about.connect("clicked", self._open_about)
+                self.bt_flash.connect("clicked", self._do_flash)
                 self._update_changes()
 
     def open_image(self):
@@ -176,3 +178,28 @@ class MainWindow(Gtk.ApplicationWindow):
         text_buffer: Gtk.TextBuffer = self.text_view_changes.get_buffer()
         text_buffer.set_text(changes)
         print("Changes:", changes)
+
+    def _do_flash(self, _widget):
+        device_text = self.selected_drive.device_model + " (" + str(self.selected_drive.get_size_readable()) + ")"
+        self._create_flash_confirmation(device_text)
+
+    def _create_flash_confirmation(self, device):
+        dialog = Adw.AlertDialog(
+            heading="Flash?",
+            body=_(
+                "Flashing the device is an irreversible operation and all data on {device} will be lost. Continue?".format(
+                    device=device)),
+            close_response="cancel",
+        )
+        dialog.add_response("cancel", "Cancel")
+        dialog.add_response("flash", "Flash")
+        dialog.set_response_appearance("flash", Adw.ResponseAppearance.DESTRUCTIVE)
+        dialog.choose(self, None, self._on_flash_confirm_selected)
+
+    def _on_flash_confirm_selected(self, _dialog, task):
+        response = _dialog.choose_finish(task)
+        if response == "flash":
+            self._do_flash_for_real()
+
+    def _do_flash_for_real(self):
+        print("Flashing...")
