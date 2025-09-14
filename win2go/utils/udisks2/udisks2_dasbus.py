@@ -115,11 +115,11 @@ def setup_windows_drive(drive: Drive, callback: Callable = None):
     else:
         print("Operation in progress")
 
-def mount_filesystem(block_device: str):
+def mount_filesystem(block_device: str) -> str:
     proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
                               block_device,
                               "org.freedesktop.UDisks2.Filesystem")
-    proxy.Mount({})
+    return proxy.Mount({})
 
 def _get_block_devices():
     proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
