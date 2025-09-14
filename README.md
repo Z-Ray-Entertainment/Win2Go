@@ -12,13 +12,13 @@ Portable SSD highly recommended.
 - List and select removable media (0B devices are hidden)
 - Open and Mount Windows ISO images
 - List and select available Windows Editions contained on ISO image
+- Format removable media as gpt
+- Create BOOT and WINDOWS partition
+- Extract selected Windows edition to device
 
 ### Work in Progress
 - Set user details
 - Registry edits
-- Format removable media as gpt
-- Create BOOT and WINDOWS partition
-- Extract selected Windows edition to device
 - Setup Windows Bootloader
 - Unmount and remove loop device of ISO image
 
