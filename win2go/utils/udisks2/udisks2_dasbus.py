@@ -191,26 +191,18 @@ def _create_windows_main_partition():
     boot_offset = boot_proxy.Offset
     boot_size = boot_proxy.Size
 
-    block_proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
-                                   selected_drive.get_top_level_block_device(),
-                                   "org.freedesktop.UDisks2.Block")
-    block_size = block_proxy.Size
-
     variant_type = VariantType.new("s")
     mkfs_args = GLib.Variant.new_array(variant_type, [
         GLib.Variant.new_string("-f"),
-        GLib.Variant.new_string("-c"),
-        GLib.Variant.new_string("4096")
     ])
 
-    offset = boot_offset + boot_size + 1  # After BOOT
-    size = block_size - offset  # All remaining space
+    offset = boot_offset + boot_size  # After BOOT
     options = {
         "partition-type": GLib.Variant.new_string(string="primary")
     }
     format_options = {
         "label": GLib.Variant.new_string("WINDOWS"),
-        "mkfs-args": mkfs_args,
+        "mkfs-args": mkfs_args
     }
 
     proxy = sys_bus.get_proxy("org.freedesktop.UDisks2",
@@ -218,7 +210,7 @@ def _create_windows_main_partition():
                               "org.freedesktop.UDisks2.PartitionTable")
 
     proxy.CreatePartitionAndFormat(
-        offset, size, "", "WINDOWS", options, "ntfs", format_options, callback=_callback_create_boot_partition
+        offset, 0, "", "WINDOWS", options, "ntfs", format_options, callback=_callback_create_windows_main_partition
     )
     # TODO: Error creating partition on /dev/sdX: Failed to add new partition to the table: Numerical result out of range
 
