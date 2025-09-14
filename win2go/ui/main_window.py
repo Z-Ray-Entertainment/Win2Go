@@ -166,6 +166,11 @@ class MainWindow(Gtk.ApplicationWindow):
             None,
             Gtk.License.LGPL_2_1_ONLY
         )
+        dialog.add_legal_section(
+            _("BCD-SYS"),
+            None,
+            Gtk.License.GPL_3_0_ONLY
+        )
 
         dialog.add_acknowledgement_section(_("Special thanks to"), ["jxctn0"])
         dialog.present(self)
