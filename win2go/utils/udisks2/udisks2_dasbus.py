@@ -1,6 +1,5 @@
 import os
 import re
-from operator import truediv
 from typing import List
 
 from dasbus.connection import SystemMessageBus
