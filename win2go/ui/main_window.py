@@ -172,23 +172,25 @@ class MainWindow(Gtk.ApplicationWindow):
         print("Update changes...")
         changes: str = ""
         if self.selected_drive is not None:
-            device_text = self.selected_drive.device_model + " (" + str(self.selected_drive.get_size_readable()) + ")"
-            changes += _("Drive {device} will be erased".format(device=device_text))
+            changes += _(
+                "Drive {device} will be erased"
+                .format(device=self.selected_drive.get_readable_drive_identification())
+            )
 
         text_buffer: Gtk.TextBuffer = self.text_view_changes.get_buffer()
         text_buffer.set_text(changes)
         print("Changes:", changes)
 
     def _do_flash(self, _widget):
-        device_text = self.selected_drive.device_model + " (" + str(self.selected_drive.get_size_readable()) + ")"
-        self._create_flash_confirmation(device_text)
+        self._create_flash_confirmation(self.selected_drive.get_readable_drive_identification())
 
     def _create_flash_confirmation(self, device):
         dialog = Adw.AlertDialog(
             heading="Flash?",
             body=_(
-                "Flashing the device is an irreversible operation and all data on {device} will be lost. Continue?".format(
-                    device=device)),
+                "Flashing the device is an irreversible operation and all data on {device} will be lost. Continue?"
+                .format(device=device)
+            ),
             close_response="cancel",
         )
         dialog.add_response("cancel", "Cancel")

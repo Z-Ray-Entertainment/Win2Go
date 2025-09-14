@@ -28,6 +28,11 @@ class Drive:
         self.device_block_devices.sort()
         return self.device_block_devices[0]
 
+    def get_readable_drive_identification(self) -> str:
+        top_level_split = self.get_top_level_block_device().split("/")
+        top_level_last = top_level_split[len(top_level_split) - 1]
+        return self.device_model + " (" + self.get_size_readable() + ", "  + top_level_last + ")"
+
     def print_device(self):
         block_dev = "["
         for block in self.device_block_devices:
