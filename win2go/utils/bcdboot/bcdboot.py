@@ -1,5 +1,6 @@
 import os
 import shutil
+import subprocess
 
 from win2go.const import SHARE_DIR
 
@@ -33,6 +34,11 @@ def _copy_bootmgr(boot_mount_path: str, windows_mount_path: str):
 def _build_bcd_store(boot_mount_path: str):
     print("Building bcd store...")
     bsc_src = "{share}/win2go/bcd/BCD".format(share=SHARE_DIR)
+    boot_reg_src = "{share}/win2go/bcd/boot.reg".format(share=SHARE_DIR)
+
     bsc_dst = "{boot}/EFI/Microsoft/Boot/BCD".format(boot=boot_mount_path)
     shutil.copy(bsc_src, bsc_dst)
+
+    subprocess.run(["hivexregedit", "--merge", "--prefix", "BCD00000001", bsc_dst, boot_reg_src])
+
     print("Done building bcd store")

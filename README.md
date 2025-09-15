@@ -45,7 +45,7 @@ Portable SSD highly recommended.
 ## Special Thanks to
 - [jxctn0](https://github.com/jxctn0/win2go) without this script I didn't knew how to pull this off
 - [dasbus](https://github.com/dasbus-project/dasbus) For this nice (UnixFD enabled) dbus abstraction for python
-- [BCS-SYS](https://github.com/jpz4085/BCD-SYS) For Linux native Windows Bootloader tool
+- [BCS-SYS](https://github.com/jpz4085/BCD-SYS) For revealing how to create windows bootloaders
 
 ## Screenshots
 
