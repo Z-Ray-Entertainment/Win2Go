@@ -7,6 +7,7 @@ import gi
 from win2go import const
 from win2go.ui.block_device_item import get_list_store_expression, build_block_device_model
 from win2go.ui.windows_edition_item import get_edition_list_store_expression, build_windows_edition_model
+from win2go.utils.bcdboot.bcdboot import create_bootloader
 from win2go.utils.udisks2.drive import Drive
 from win2go.utils.udisks2.loop_device import LoopDevice
 from win2go.utils.udisks2.udisks2_dasbus import find_removable_media, loop_setup, get_missing_filesystems, \
@@ -18,7 +19,7 @@ from win2go.utils.wimlib.windows_edition import WindowsEdition
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 from gi.repository import Gtk, Adw
-from gi.repository.Gtk import DropDown, Button, FileFilter, TextView
+from gi.repository.Gtk import DropDown, FileFilter, TextView, Entry, Button
 
 
 def _on_close_error_and_exit(_dialog, result):
@@ -35,6 +36,9 @@ class MainWindow(Gtk.ApplicationWindow):
     windows_edition_drop_down: DropDown = Gtk.Template.Child()
     text_view_changes: TextView = Gtk.Template.Child()
     bt_flash: Button = Gtk.Template.Child()
+    entry_boot_mount: Entry = Gtk.Template.Child()
+    entry_windows_mount: Entry = Gtk.Template.Child()
+    bt_test_boot: Button = Gtk.Template.Child()
 
     file_dialog: Gtk.FileDialog
 
@@ -65,6 +69,7 @@ class MainWindow(Gtk.ApplicationWindow):
                 self.device_drop_down.connect("notify::selected-item", self.on_block_device_selected_item)
 
                 self.open_iso.connect("clicked", lambda *_: self.open_image())
+                self.bt_test_boot.connect("clicked", self._setup_boot)
                 self.bt_about.connect("clicked", self._open_about)
                 self.bt_flash.connect("clicked", self._do_flash)
                 self._update_changes()
@@ -217,4 +222,11 @@ class MainWindow(Gtk.ApplicationWindow):
     def _drive_prepared_callback(self, block_boot, block_windows):
         boot_mount_path = mount_filesystem(block_boot)
         main_mount_path = mount_filesystem(block_windows)
-        asyncio.run(apply_windows_edition(main_mount_path, self.wim_info, self.selected_windows_edition))
+        _loop = asyncio.new_event_loop()
+        _loop.run_until_complete(apply_windows_edition(main_mount_path, self.wim_info, self.selected_windows_edition))
+
+    def _setup_boot(self, _widget):
+        boot_mount = self.entry_boot_mount.get_text()
+        windows_mount = self.entry_windows_mount.get_text()
+        _loop = asyncio.new_event_loop()
+        _loop.run_until_complete(create_bootloader(boot_mount, windows_mount))

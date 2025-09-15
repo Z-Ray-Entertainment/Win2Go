@@ -6,5 +6,6 @@ utils_sources = files([
 
 subdir('udisks2')
 subdir('wimlib')
+subdir('bcdboot')
 
 install_data(utils_sources, install_dir: utils_dir)

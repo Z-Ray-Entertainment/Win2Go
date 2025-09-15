@@ -60,6 +60,35 @@ template $Win2GoMainWindow: ApplicationWindow {
         title: "Win2Go";
         description: _("Install Windows on USB Devices");
         icon-name: "de.z_ray.Win2Go";
+
+        child: Box {
+          orientation: vertical;
+          spacing: 10;
+
+          Gtk.Label {
+            label: _("Test setup of Boot:");
+          }
+
+          Gtk.Entry entry_boot_mount {
+            placeholder-text: _("Mount point of BOOT");
+            hexpand: true;
+          }
+
+          Gtk.Entry entry_windows_mount {
+            placeholder-text: _("Mount point of WINDOWS");
+            hexpand: true;
+          }
+
+          Button bt_test_boot {
+            label: _("Setup BOOT");
+            tooltip-text: _("Set's up the Widnows Bootloader");
+
+            styles [
+              "pill",
+            ]
+          }
+
+        };
       }
 
       Adw.StatusPage {
@@ -149,7 +178,6 @@ template $Win2GoMainWindow: ApplicationWindow {
           }
         };
       } */
-
       Adw.StatusPage {
         vexpand: true;
         hexpand: true;
