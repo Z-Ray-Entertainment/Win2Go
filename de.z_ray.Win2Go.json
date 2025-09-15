@@ -139,6 +139,23 @@
       ]
     },
     {
+      "name": "xxd",
+      "buildsystem": "simple",
+      "build-commands": [
+        "mkdir build",
+        "cmake -G Ninja && ninja",
+        "install xxd ${FLATPAK_DEST}/bin/xxd"
+      ],
+      "builddir": true,
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://github.com/ckormanyos/xxd",
+          "tag": "v1.2"
+        }
+      ]
+    },
+    {
       "name": "bcd-sys",
       "buildsystem": "simple",
       "build-commands": [
