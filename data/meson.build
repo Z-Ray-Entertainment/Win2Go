@@ -34,3 +34,10 @@ gnome.compile_resources('win2go',
   install: true,
   install_dir: pkgdatadir,
 )
+
+bcd_dir = join_paths(pkgdatadir, 'win2go', 'bcd')
+bcd_files = files([
+    'bcd/BCD',
+    'bcd/boot.reg'
+])
+install_data(bcd_files, install_dir: bcd_dir)

@@ -10,6 +10,9 @@ pkgdatadir = '@pkgdatadir@'
 if environ.get("FLATPAK_ID") is not None:
     sys.path.insert(1, pkgdatadir)
 
+from win2go import const
+const.SHARE_DIR = pkgdatadir
+
 resource = Gio.Resource.load(filename=os.path.join(pkgdatadir, "win2go.gresource"))
 Gio.resources_register(resource)
 

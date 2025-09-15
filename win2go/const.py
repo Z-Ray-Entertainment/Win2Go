@@ -8,3 +8,4 @@ else:
     LOCALE_DIR = "data/po"
 APP_NAME = "Win2Go"
 APP_ID = "@APPID@"
+SHARE_DIR = ""
