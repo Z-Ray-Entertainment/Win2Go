@@ -123,6 +123,22 @@
       ]
     },
     {
+      "name": "readpe",
+      "buildsystem": "simple",
+      "build-commands": [
+        "make",
+        "make prefix=${FLATPAK_DEST} install"
+      ],
+      "builddir": true,
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://github.com/mentebinaria/readpe",
+          "tag": "0.85.1"
+        }
+      ]
+    },
+    {
       "name": "bcd-sys",
       "buildsystem": "simple",
       "build-commands": [
