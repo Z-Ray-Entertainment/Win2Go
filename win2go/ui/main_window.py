@@ -167,37 +167,6 @@ class MainWindow(Gtk.ApplicationWindow):
             Gtk.License.LGPL_2_1
         )
         dialog.add_legal_section(
-            _("BCD-SYS"),
-            None,
-            Gtk.License.GPL_3_0
-        )
-        dialog.add_legal_section(
-            _("hivex"),
-            None,
-            Gtk.License.LGPL_2_1
-        )
-        dialog.add_legal_section(
-            _("readpe"),
-            None,
-            Gtk.License.GPL_2_0
-        )
-        dialog.add_legal_section(
-            _("xxd"),
-            None,
-            Gtk.License.GPL_2_0
-        )
-        dialog.add_legal_section(
-            _("IO - stringy"),
-            None,
-            Gtk.License.CUSTOM,
-            _("The ’IO-stringy’ Perl5 toolkit <a href='https://metacpan.org/dist/IO-stringy'>metacpan.org</a>")
-        )
-        dialog.add_legal_section(
-            _("fatattr"),
-            None,
-            Gtk.License.GPL_3_0
-        )
-        dialog.add_legal_section(
             _("Blueprint"),
             None,
             Gtk.License.GPL_3_0

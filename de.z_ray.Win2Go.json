@@ -3,10 +3,6 @@
   "runtime": "org.gnome.Platform",
   "runtime-version": "48",
   "sdk": "org.gnome.Sdk",
-  "sdk-extensions": [
-    "org.freedesktop.Sdk.Extension.ocaml",
-    "org.freedesktop.Sdk.Extension.llvm20"
-  ],
   "command": "win2go",
   "finish-args": [
     "--socket=wayland",
@@ -27,162 +23,6 @@
     "*.a"
   ],
   "modules": [
-    {
-      "name": "perl",
-      "no-autogen": true,
-      "post-install": [
-        "find /app/lib/perl5/ -name \"*.so\" -exec chmod 755 {} \\;"
-      ],
-      "cleanup": [
-        "/bin",
-        "/man",
-        "/lib/perl5/site_perl",
-        "*.pod",
-        "*.h"
-      ],
-      "sources": [
-        {
-          "type": "archive",
-          "url": "https://www.cpan.org/src/5.0/perl-5.42.0.tar.gz",
-          "sha256": "e093ef184d7f9a1b9797e2465296f55510adb6dab8842b0c3ed53329663096dc"
-        },
-        {
-          "type": "script",
-          "dest-filename": "configure",
-          "commands": [
-            "exec ./configure.gnu $@"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "perl-io-stringy",
-      "no-autogen": true,
-      "buildsystem": "simple",
-      "build-commands": [
-        "perl Makefile.PL",
-        "make",
-        "make install"
-      ],
-      "sources": [
-        {
-          "type": "archive",
-          "url": "https://cpan.metacpan.org/authors/id/D/DS/DSKOLL/IO-stringy-2.111.tar.gz",
-          "sha256": "8c67fd6608c3c4e74f7324f1404a856c331dbf48d9deda6aaa8296ea41bf199d"
-        }
-      ]
-    },
-    {
-      "name": "hivex",
-      "builddir": true,
-      "buildsystem": "simple",
-      "build-options": {
-        "append-path": "/usr/lib/sdk/ocaml/bin"
-      },
-      "post-install": [
-        "find /app/lib/perl5/ -name \"*.so\" -exec chmod 755 {} \\;"
-      ],
-      "build-commands": [
-        "autoreconf -i",
-        "./generator/generator.ml",
-        "./configure --prefix=${FLATPAK_DEST} --disable-python --disable-ruby",
-        "make",
-        "make check",
-        "make install"
-      ],
-      "sources": [
-        {
-          "type": "git",
-          "url": "https://github.com/libguestfs/hivex",
-          "tag": "v1.3.24"
-        }
-      ]
-    },
-    {
-      "name": "fatattr",
-      "buildsystem": "simple",
-      "build-options": {
-        "append-path": "/usr/lib/sdk/llvm20/bin",
-        "prepend-ld-library-path": "/usr/lib/sdk/llvm20/lib"
-      },
-      "build-commands": [
-        "mkdir build/",
-        "mkdir bin/",
-        "clang -o build/main.o -c -pedantic -std=c11 -O2 -Isrc src/main.c",
-        "clang -o build/dosfs.o -c -pedantic -std=c11 -O2 -Isrc src/dosfs.c",
-        "clang -o bin/fatattr build/main.o build/dosfs.o",
-        "install bin/fatattr ${FLATPAK_DEST}/bin/fatattr"
-      ],
-      "builddir": true,
-      "sources": [
-        {
-          "type": "git",
-          "url": "https://gitlab.com/Terseus/fatattr",
-          "tag": "master"
-        }
-      ]
-    },
-    {
-      "name": "readpe",
-      "buildsystem": "simple",
-      "build-commands": [
-        "make",
-        "make prefix=${FLATPAK_DEST} install"
-      ],
-      "builddir": true,
-      "sources": [
-        {
-          "type": "git",
-          "url": "https://github.com/mentebinaria/readpe",
-          "tag": "0.85.1"
-        }
-      ]
-    },
-    {
-      "name": "xxd",
-      "buildsystem": "simple",
-      "build-commands": [
-        "mkdir build",
-        "cmake -G Ninja && ninja",
-        "install xxd ${FLATPAK_DEST}/bin/xxd"
-      ],
-      "builddir": true,
-      "sources": [
-        {
-          "type": "git",
-          "url": "https://github.com/ckormanyos/xxd",
-          "tag": "v1.2"
-        }
-      ]
-    },
-    {
-      "name": "bcd-sys",
-      "buildsystem": "simple",
-      "build-commands": [
-        "mkdir -p ${FLATPAK_DEST}/share/BCD-SYS/Resources",
-        "install Linux/bcd-sys.sh ${FLATPAK_DEST}/bin/bcd-sys",
-        "install Linux/recovery.sh ${FLATPAK_DEST}/share/BCD-SYS",
-        "install Linux/update_device.sh ${FLATPAK_DEST}/share/BCD-SYS",
-        "install Linux/wbmfwvar.sh ${FLATPAK_DEST}/share/BCD-SYS",
-        "install Linux/winload.sh ${FLATPAK_DEST}/share/BCD-SYS",
-        "install Resources/attach-vhdx.sh ${FLATPAK_DEST}/bin/attach-vhdx",
-        "install Resources/detach-vhdx.sh ${FLATPAK_DEST}/bin/detach-vhdx",
-        "cp Resources/*.txt ${FLATPAK_DEST}/share/BCD-SYS/Resources",
-        "cp -r Templates ${FLATPAK_DEST}/share/BCD-SYS",
-        "perl -i -pe\"s|resdir=\\\".\\\"|resdir=\\\"${FLATPAK_DEST}/share/BCD-SYS\\\"|\" ${FLATPAK_DEST}/bin/bcd-sys",
-        "perl -i -pe\"s|tmpdir=\\\".\\\"|tmpdir=\\\"/tmp\\\"|\" ${FLATPAK_DEST}/bin/bcd-sys",
-        "perl -i -pe\"s|resdir=\\\".\\\"|resdir=\\\"${FLATPAK_DEST}/share/BCD-SYS\\\"|\" ${FLATPAK_DEST}/share/BCD-SYS/recovery.sh",
-        "perl -i -pe\"s|resdir=\\\".\\\"|resdir=\\\"${FLATPAK_DEST}/share/BCD-SYS\\\"|\" ${FLATPAK_DEST}/share/BCD-SYS/winload.sh"
-      ],
-      "builddir": true,
-      "sources": [
-        {
-          "type": "git",
-          "url": "https://github.com/jpz4085/BCD-SYS",
-          "tag": "v2.1"
-        }
-      ]
-    },
     {
       "name": "dasbus",
       "buildsystem": "simple",
@@ -213,7 +53,7 @@
       ]
     },
     {
-      "name": "winlib",
+      "name": "wimlib",
       "builddir": true,
       "sources": [
         {
