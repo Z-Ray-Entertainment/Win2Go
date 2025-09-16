@@ -88,6 +88,7 @@ Element=string:{$windows-resume-guid$}
 [BCD00000001\Objects\{$windows-loader-guid$}\Elements\250000c2]
 "Element"=hex(3):01,00,00,00,00,00,00,00
 
+### Windows Boot Manager Entry ###
 [BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}]
 
 [BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Description]
@@ -96,11 +97,18 @@ Element=string:{$windows-resume-guid$}
 [BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements]
 
 [BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\11000001]
+"Element"=hex(3):00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,06,00,00,00,\
+  00,00,00,00,48,00,00,00,00,00,00,00,$destinationpath-partbytes$,00,00,00,00,00,\
+  00,00,00,$destinationpath-diskbytes$,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
+
+[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\12000002]
+"Element"=string:\\EFI\Microsoft\Boot\\bootmgfw.efi
 
 [BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\12000004]
 "Element"="Windows Boot Manager"
 
 [BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\12000005]
+"Element"=string:$locale$
 
 [BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\14000006]
 "Element"=hex(7):7b,00,37,00,65,00,61,00,32,00,65,00,31,00,61,00,63,00,2d,00,\
@@ -109,10 +117,13 @@ Element=string:{$windows-resume-guid$}
   30,00,65,00,7d,00,00,00,00,00
 
 [BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\23000003]
+"Element"=string:{$windows-loader-guid$}
 
 [BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\23000006]
+"Element"=string:{$windows-resume-guid$}
 
 [BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\24000001]
+"Element"=hex(7):$windows-loader-guid-as-hex$
 
 [BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\24000010]
 "Element"=hex(7):7b,00,62,00,32,00,37,00,32,00,31,00,64,00,37,00,33,00,2d,00,\
