@@ -162,17 +162,28 @@ class MainWindow(Gtk.ApplicationWindow):
         )
 
         dialog.add_legal_section(
-            _("Wimlib"),
+            "Wimlib",
             None,
             Gtk.License.GPL_3_0_ONLY
         )
         dialog.add_legal_section(
-            _("dasbus"),
+            "hivex",
             None,
             Gtk.License.LGPL_2_1
         )
         dialog.add_legal_section(
-            _("Blueprint"),
+            "IO - stringy",
+            None,
+            Gtk.License.CUSTOM,
+            _("The ’IO-stringy’ Perl5 toolkit <a href='https://metacpan.org/dist/IO-stringy'>metacpan.org</a>")
+        )
+        dialog.add_legal_section(
+            "dasbus",
+            None,
+            Gtk.License.LGPL_2_1
+        )
+        dialog.add_legal_section(
+            "Blueprint",
             None,
             Gtk.License.GPL_3_0
         )
