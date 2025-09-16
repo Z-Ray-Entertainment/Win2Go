@@ -142,13 +142,18 @@ Element=string:{$windows-resume-guid$}
 [BCD00000001\Objects\{b2721d73-1db4-4c62-bf78-c548a880142d}\Elements]
 
 [BCD00000001\Objects\{b2721d73-1db4-4c62-bf78-c548a880142d}\Elements\11000001]
+"Element"="Element"=hex(3):00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,06,00,00,00,\
+  00,00,00,00,48,00,00,00,00,00,00,00,$sysempath-partbytes$,00,00,00,00,00,\
+  00,00,00,$sysempath-diskbytes$,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
 
 [BCD00000001\Objects\{b2721d73-1db4-4c62-bf78-c548a880142d}\Elements\12000002]
+"Element"=string:\EFI\Microsoft\Boot\memtest.efi
 
 [BCD00000001\Objects\{b2721d73-1db4-4c62-bf78-c548a880142d}\Elements\12000004]
 "Element"="Windows Memory Diagnostic"
 
 [BCD00000001\Objects\{b2721d73-1db4-4c62-bf78-c548a880142d}\Elements\12000005]
+"Element"=string:$locale$
 
 [BCD00000001\Objects\{b2721d73-1db4-4c62-bf78-c548a880142d}\Elements\14000006]
 "Element"=hex(7):7b,00,37,00,65,00,61,00,32,00,65,00,31,00,61,00,63,00,2d,00,\
