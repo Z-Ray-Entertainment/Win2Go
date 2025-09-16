@@ -1,40 +1,5 @@
 Windows Registry Editor Version 5.00
 
-[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}]
-
-[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Description]
-"Type"=dword:10100002
-
-[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements]
-
-[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\11000001]
-
-[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\12000004]
-"Element"="Windows Boot Manager"
-
-[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\12000005]
-
-[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\14000006]
-"Element"=hex(7):7b,00,37,00,65,00,61,00,32,00,65,00,31,00,61,00,63,00,2d,00,\
-  32,00,65,00,36,00,31,00,2d,00,34,00,37,00,32,00,38,00,2d,00,61,00,61,00,61,\
-  00,33,00,2d,00,38,00,39,00,36,00,64,00,39,00,64,00,30,00,61,00,39,00,66,00,\
-  30,00,65,00,7d,00,00,00,00,00
-
-[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\23000003]
-
-[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\23000006]
-
-[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\24000001]
-
-[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\24000010]
-"Element"=hex(7):7b,00,62,00,32,00,37,00,32,00,31,00,64,00,37,00,33,00,2d,00,\
-  31,00,64,00,62,00,34,00,2d,00,34,00,63,00,36,00,32,00,2d,00,62,00,66,00,37,\
-  00,38,00,2d,00,63,00,35,00,34,00,38,00,61,00,38,00,38,00,30,00,31,00,34,00,\
-  32,00,64,00,7d,00,00,00,00,00
-
-[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\25000004]
-"Element"=hex:1e,00,00,00,00,00,00,00
-
 ### Windows Resume Loader Entry ###
 [BCD00000001\Objects\$windows-resume-guid$\Description]
 "Type"=dword:0x10200004
@@ -75,6 +40,41 @@ Windows Registry Editor Version 5.00
 
 [BCD00000001\Objects\$windows-resume-guid$\Elements\25000008]
 "Element"=hex(3):01,00,00,00,00,00,00,00
+
+[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}]
+
+[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Description]
+"Type"=dword:10100002
+
+[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements]
+
+[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\11000001]
+
+[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\12000004]
+"Element"="Windows Boot Manager"
+
+[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\12000005]
+
+[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\14000006]
+"Element"=hex(7):7b,00,37,00,65,00,61,00,32,00,65,00,31,00,61,00,63,00,2d,00,\
+  32,00,65,00,36,00,31,00,2d,00,34,00,37,00,32,00,38,00,2d,00,61,00,61,00,61,\
+  00,33,00,2d,00,38,00,39,00,36,00,64,00,39,00,64,00,30,00,61,00,39,00,66,00,\
+  30,00,65,00,7d,00,00,00,00,00
+
+[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\23000003]
+
+[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\23000006]
+
+[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\24000001]
+
+[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\24000010]
+"Element"=hex(7):7b,00,62,00,32,00,37,00,32,00,31,00,64,00,37,00,33,00,2d,00,\
+  31,00,64,00,62,00,34,00,2d,00,34,00,63,00,36,00,32,00,2d,00,62,00,66,00,37,\
+  00,38,00,2d,00,63,00,35,00,34,00,38,00,61,00,38,00,38,00,30,00,31,00,34,00,\
+  32,00,64,00,7d,00,00,00,00,00
+
+[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\25000004]
+"Element"=hex:1e,00,00,00,00,00,00,00
 
 [BCD00000001\Objects\{b2721d73-1db4-4c62-bf78-c548a880142d}]
 
