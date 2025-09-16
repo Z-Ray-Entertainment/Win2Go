@@ -1,16 +1,15 @@
 import os
 import shutil
-import subprocess
 
 from win2go.const import SHARE_DIR
-from win2go.utils.bcdboot.winload import create_winload
+from win2go.utils.bcdboot import hivex, boot_reg
 
 
 async def create_bootloader(boot_mount_path: str, windows_mount_path: str):
     print("Creating bootloader...")
     if boot_mount_path != "" and windows_mount_path != "":
         _copy_bootmgr(boot_mount_path, windows_mount_path)
-        _build_bcd_store(boot_mount_path)
+        _build_bcd_store(boot_mount_path, windows_mount_path)
     else:
         print("No boot mount path or windows mount path")
 
@@ -32,12 +31,16 @@ def _copy_bootmgr(boot_mount_path: str, windows_mount_path: str):
     print("Done copying bootmgr")
 
 
-def _build_bcd_store(boot_mount_path: str):
+def _build_bcd_store(boot_mount_path: str, windows_mount_path: str):
     print("Setup BCD...")
 
     bcd_path = _copy_bcd(boot_mount_path)
-    _patch_bcd(bcd_path, boot_mount_path)
-    create_winload(bcd_path, boot_mount_path)
+
+    boot_reg_src = "{share}/win2go/bcd/boot.reg".format(share=SHARE_DIR)
+    boot_reg_dst = "{boot}/boot.reg".format(boot=boot_mount_path)
+    shutil.copy(boot_reg_src, boot_reg_dst)
+    boot_reg.patch_boot_reg(boot_reg_dst, windows_mount_path, boot_mount_path)
+    hivex.merge_bcd_with_reg(bcd_path, boot_reg_src)
 
     print("Done building bcd store")
 
@@ -50,8 +53,3 @@ def _copy_bcd(boot_mount_path: str) -> str:
 
     print("BCD created at {}".format(bcd_dst))
     return bcd_dst
-
-def _patch_bcd(bcd_path: str, boot_path: str):
-    print("Patching BCD...")
-    boot_reg_src = "{share}/win2go/bcd/boot.reg".format(share=SHARE_DIR)
-    subprocess.run(["hivexregedit", "--merge", "--prefix", "BCD00000001", bcd_path, boot_reg_src])
