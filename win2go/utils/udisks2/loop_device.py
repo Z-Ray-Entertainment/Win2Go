@@ -1,4 +1,4 @@
-from win2go.utils.udisks2.udisks2_dasbus import filesystem_mount
+from win2go.utils.udisks2.udisks2 import filesystem_mount
 
 
 class LoopDevice:

@@ -69,8 +69,23 @@ template $Win2GoMainWindow: ApplicationWindow {
             label: _("Test setup of Boot:");
           }
 
+          Gtk.Entry entry_disk_guid {
+            placeholder-text: _("Disk GUID");
+            hexpand: true;
+          }
+
+          Gtk.Entry entry_boot_guid {
+            placeholder-text: _("Boot GUID");
+            hexpand: true;
+          }
+
           Gtk.Entry entry_boot_mount {
             placeholder-text: _("Mount point of BOOT");
+            hexpand: true;
+          }
+
+          Gtk.Entry entry_windows_guid {
+            placeholder-text: _("Windows GUID");
             hexpand: true;
           }
 

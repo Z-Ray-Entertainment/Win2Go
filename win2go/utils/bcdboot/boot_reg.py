@@ -14,10 +14,10 @@ WINDOWS_DISK_BYTES = "\\$windows-diskbytes\\$"
 
 LOCALE = "\\$locale\\$"
 
+COMMENTS = re.compile("#[a-zA-Z ]*#")
 
 def patch_boot_reg(boot_reg_path: str, windows_partition_guid: str, boot_partition_guid: str, disk_guid: str,
-                   locale: str = "en-US"):
-    print("Patch boot.reg...")
+                   locale: str = "en-US", windows_edition: str = "Windows"):
     win_resume_guid = uuid.uuid4()
     win_loader_guid = uuid.uuid4()
 
@@ -34,11 +34,15 @@ def patch_boot_reg(boot_reg_path: str, windows_partition_guid: str, boot_partiti
         file_data = re.sub(BOOT_PATH_PART_BYTES, str(raped_boot_guid), file_data)
         file_data = re.sub(WINDOWS_DISK_BYTES, raped_disk_guid, file_data)
 
+        file_data = re.sub(WINDOWS_EDITION_DISPLAY_NAME, windows_edition, file_data)
+
+        file_data = re.sub(WINDOWS_LOADER_GUID_HEX, _hexdump(str(win_loader_guid)), file_data)
+
+        file_data = re.sub(COMMENTS, "", file_data)
+
         boot_reg.seek(0)
         boot_reg.write(file_data)
         boot_reg.truncate()
-    print("Patched boot.reg")
-
 
 def _rape_guid(guid: str) -> str:
     raped_guid = ""
@@ -48,17 +52,30 @@ def _rape_guid(guid: str) -> str:
     raped_guid += _reverse_group(groups[2])
     raped_guid += groups[3]
     raped_guid += groups[4]
+
+    raped_guid = _split_guid_by_delimiter(raped_guid)
+
     return raped_guid
 
 
 def _reverse_group(group: str) -> str:
-    print("Reverse " + group)
     reversed_group = ""
     i = len(group)
 
     while i > 0:
-        reversed_group += group[i:2]
-        i -= 2
+        i = i - 2
+        reversed_group += group[i:i+2]
 
-    print("Reversd " + reversed_group)
     return reversed_group
+
+def _split_guid_by_delimiter(guid: str):
+    split_guid: str = ""
+    for i in range(0, len(guid), 2):
+        split_guid += guid[i:i+2] + ","
+        i = i + 3
+    return split_guid[0:len(split_guid)-1]
+
+def _hexdump(guid: str):
+    b = guid.encode("utf-8") + b"\x00\x00"
+    out_bytes = "".join(f"{byte:02x}00" for byte in b)
+    return out_bytes

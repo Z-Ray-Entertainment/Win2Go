@@ -7,13 +7,12 @@ import gi
 from win2go import const
 from win2go.ui.block_device_item import get_list_store_expression, build_block_device_model
 from win2go.ui.windows_edition_item import get_edition_list_store_expression, build_windows_edition_model
-from win2go.utils.bcdboot.bcdboot import create_bootloader
+from win2go.utils.bcdboot import bcdboot
 from win2go.utils.udisks2.drive import Drive
 from win2go.utils.udisks2.loop_device import LoopDevice
-from win2go.utils.udisks2.udisks2_dasbus import find_removable_media, loop_setup, get_missing_filesystems, \
-    is_udisks2_supported, setup_windows_drive, mount_filesystem
+from win2go.utils.udisks2 import udisks2
 from win2go.utils.wimlib.wim_info import WIMInfo
-from win2go.utils.wimlib.wimlib import get_wim_info, apply_windows_edition
+from win2go.utils.wimlib import wimlib
 from win2go.utils.wimlib.windows_edition import WindowsEdition
 
 gi.require_version("Gtk", "4.0")
@@ -36,7 +35,11 @@ class MainWindow(Gtk.ApplicationWindow):
     windows_edition_drop_down: DropDown = Gtk.Template.Child()
     text_view_changes: TextView = Gtk.Template.Child()
     bt_flash: Button = Gtk.Template.Child()
+
+    entry_disk_guid: Entry = Gtk.Template.Child()
+    entry_boot_guid: Entry = Gtk.Template.Child()
     entry_boot_mount: Entry = Gtk.Template.Child()
+    entry_windows_guid: Entry = Gtk.Template.Child()
     entry_windows_mount: Entry = Gtk.Template.Child()
     bt_test_boot: Button = Gtk.Template.Child()
 
@@ -51,14 +54,14 @@ class MainWindow(Gtk.ApplicationWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        if not is_udisks2_supported():
+        if not udisks2.is_udisks2_supported():
             self._create_error_udisks2_not_supported()
         else:
-            missing_fs = get_missing_filesystems(["ntfs", "udf", "vfat"])
+            missing_fs = udisks2.get_missing_filesystems(["ntfs", "udf", "vfat"])
             if len(missing_fs) > 0:
                 self._create_error_unsupported_filesystem_dialog(missing_fs)
             else:
-                self.all_removable_drives = find_removable_media()
+                self.all_removable_drives = udisks2.find_removable_media()
                 if len(self.all_removable_drives) > 0:
                     self.selected_drive = self.all_removable_drives[0]
                 else:
@@ -79,14 +82,14 @@ class MainWindow(Gtk.ApplicationWindow):
 
     def on_image_opened(self, file_dialog, result):
         iso_file = file_dialog.open_finish(result)
-        loop_path = loop_setup(iso_file)
+        loop_path = udisks2.loop_setup(iso_file)
         if loop_path is None:
             self._create_error_sandbox_path_dialog()
         else:
             self.open_iso.set_label(iso_file.get_basename())
             self.image_file = LoopDevice(loop_path)
             self.image_file.mount()
-            self.wim_info = get_wim_info(self.image_file.mount_path)
+            self.wim_info = wimlib.get_wim_info(self.image_file.mount_path)
             self.selected_windows_edition = self.wim_info.images[0]
             self.windows_edition_drop_down.set_visible(True)
             self.windows_edition_drop_down.set_expression(get_edition_list_store_expression())
@@ -228,16 +231,23 @@ class MainWindow(Gtk.ApplicationWindow):
 
     def _do_flash_for_real(self):
         print("Flashing...")
-        setup_windows_drive(self.selected_drive, callback=self._drive_prepared_callback)
+        udisks2.setup_windows_drive(self.selected_drive, callback=self._drive_prepared_callback)
 
     def _drive_prepared_callback(self, block_boot, block_windows):
-        boot_mount_path = mount_filesystem(block_boot)
-        main_mount_path = mount_filesystem(block_windows)
+        boot_mount_path = udisks2.mount_filesystem(block_boot)
+        main_mount_path = udisks2.mount_filesystem(block_windows)
         _loop = asyncio.new_event_loop()
-        _loop.run_until_complete(apply_windows_edition(main_mount_path, self.wim_info, self.selected_windows_edition))
+        _loop.run_until_complete(
+            wimlib.apply_windows_edition(
+                main_mount_path, self.wim_info, self.selected_windows_edition
+            )
+        )
 
     def _setup_boot(self, _widget):
         boot_mount = self.entry_boot_mount.get_text()
         windows_mount = self.entry_windows_mount.get_text()
+        boot_guid: str = self.entry_boot_guid.get_text()
+        win_guid: str = self.entry_windows_guid.get_text()
+        disk_guid: str = self.entry_disk_guid.get_text()
         _loop = asyncio.new_event_loop()
-        _loop.run_until_complete(create_bootloader(boot_mount, windows_mount))
+        _loop.run_until_complete(bcdboot.create_bootloader(boot_mount, windows_mount, disk_guid, boot_guid, win_guid))

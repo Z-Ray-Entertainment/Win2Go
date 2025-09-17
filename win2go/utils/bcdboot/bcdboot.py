@@ -4,12 +4,11 @@ import shutil
 from win2go.const import SHARE_DIR
 from win2go.utils.bcdboot import hivex, boot_reg
 
-
-async def create_bootloader(boot_mount_path: str, windows_mount_path: str):
+async def create_bootloader(boot_mount_path: str, windows_mount_path: str, disk_guid: str, boot_guid: str, win_guid: str):
     print("Creating bootloader...")
     if boot_mount_path != "" and windows_mount_path != "":
         _copy_bootmgr(boot_mount_path, windows_mount_path)
-        _build_bcd_store(boot_mount_path, windows_mount_path)
+        _build_bcd_store(boot_mount_path, disk_guid, boot_guid, win_guid)
     else:
         print("No boot mount path or windows mount path")
 
@@ -31,7 +30,7 @@ def _copy_bootmgr(boot_mount_path: str, windows_mount_path: str):
     print("Done copying bootmgr")
 
 
-def _build_bcd_store(boot_mount_path: str, windows_mount_path: str):
+def _build_bcd_store(boot_mount_path: str, disk_guid: str, boot_guid: str, win_guid: str):
     print("Setup BCD...")
 
     bcd_path = _copy_bcd(boot_mount_path)
@@ -39,8 +38,8 @@ def _build_bcd_store(boot_mount_path: str, windows_mount_path: str):
     boot_reg_src = "{share}/win2go/bcd/boot.reg".format(share=SHARE_DIR)
     boot_reg_dst = "{boot}/boot.reg".format(boot=boot_mount_path)
     shutil.copy(boot_reg_src, boot_reg_dst)
-    boot_reg.patch_boot_reg(boot_reg_dst, windows_partition_guid, boot_partition_guid, disk_guid)
-    hivex.merge_bcd_with_reg(bcd_path, boot_reg_src)
+    boot_reg.patch_boot_reg(boot_reg_dst, win_guid, boot_guid, disk_guid)
+    hivex.merge_bcd_with_reg(bcd_path, boot_reg_dst)
 
     print("Done building bcd store")
 
