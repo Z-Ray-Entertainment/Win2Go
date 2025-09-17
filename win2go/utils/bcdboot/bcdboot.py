@@ -39,7 +39,7 @@ def _build_bcd_store(boot_mount_path: str, windows_mount_path: str):
     boot_reg_src = "{share}/win2go/bcd/boot.reg".format(share=SHARE_DIR)
     boot_reg_dst = "{boot}/boot.reg".format(boot=boot_mount_path)
     shutil.copy(boot_reg_src, boot_reg_dst)
-    boot_reg.patch_boot_reg(boot_reg_dst, windows_mount_path, boot_mount_path)
+    boot_reg.patch_boot_reg(boot_reg_dst, windows_partition_guid, boot_partition_guid, disk_guid)
     hivex.merge_bcd_with_reg(bcd_path, boot_reg_src)
 
     print("Done building bcd store")
