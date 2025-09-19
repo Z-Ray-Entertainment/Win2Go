@@ -9,9 +9,7 @@ Windows Registry Editor Version 5.00
 [BCD00000001\Objects\{$windows-resume-guid$}\Elements]
 
 [BCD00000001\Objects\{$windows-resume-guid$}\Elements\11000001]
-"Element"=hex(3):00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,06,00,00,00,\
-  00,00,00,00,48,00,00,00,00,00,00,00,$windowspath-partbytes$,00,00,00,00,00,\
-  00,00,00,$windows-diskbytes$,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
+"Element"=hex(3):00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,06,00,00,00,00,00,00,00,48,00,00,00,00,00,00,00,$windowspath-partbytes$,00,00,00,00,00,00,00,00,$windows-diskbytes$,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
 
 [BCD00000001\Objects\{$windows-resume-guid$}\Elements\12000002]
 "Element"="\Windows\system32\winresume.efi"
@@ -23,10 +21,7 @@ Windows Registry Editor Version 5.00
 "Element"="$locale$"
 
 [BCD00000001\Objects\{$windows-resume-guid$}\Elements\14000006]
-"Element"=hex(7):7b,00,31,00,61,00,66,00,61,00,39,00,63,00,34,00,39,00,2d,00,31,\
-  00,36,00,61,00,62,00,2d,00,34,00,61,00,35,00,63,00,2d,00,39,00,30,00,31,00,62,\
-  00,2d,00,32,00,31,00,32,00,38,00,30,00,32,00,64,00,61,00,39,00,34,00,36,00,30,\
-  00,7d,00,00,00,00,00
+"Element"=hex(7):7b,00,31,00,61,00,66,00,61,00,39,00,63,00,34,00,39,00,2d,00,31,00,36,00,61,00,62,00,2d,00,34,00,61,00,35,00,63,00,2d,00,39,00,30,00,31,00,62,00,2d,00,32,00,31,00,32,00,38,00,30,00,32,00,64,00,61,00,39,00,34,00,36,00,30,00,7d,00,00,00,00,00
 
 [BCD00000001\Objects\{$windows-resume-guid$}\Elements\16000060]
 "Element"=hex(3):01
@@ -35,9 +30,7 @@ Windows Registry Editor Version 5.00
 "Element"=hex(3):75,00,00,15,00,00,00,00
 
 [BCD00000001\Objects\{$windows-resume-guid$}\Elements\21000001]
-"Element"=hex(3):00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,06,00,00,00,\
-  00,00,00,00,48,00,00,00,00,00,00,00,$windowspath-partbytes$,00,00,00,00,00,\
-  00,00,00,$windows-diskbytes$,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
+"Element"=hex(3):00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,06,00,00,00,00,00,00,00,48,00,00,00,00,00,00,00,$windowspath-partbytes$,00,00,00,00,00,00,00,00,$windows-diskbytes$,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
 
 [BCD00000001\Objects\{$windows-resume-guid$}\Elements\22000002]
 "Element"="\hiberfil.sys"
@@ -54,9 +47,7 @@ Windows Registry Editor Version 5.00
 [BCD00000001\Objects\{$windows-loader-guid$}\Elements]
 
 [BCD00000001\Objects\{$windows-loader-guid$}\Elements\11000001]
-"Element"=hex(3):00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,06,00,00,00,\
-  00,00,00,00,48,00,00,00,00,00,00,00,$windowspath-partbytes$,00,00,00,00,00,\
-  00,00,00,$windows-diskbytes$,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
+"Element"=hex(3):00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,06,00,00,00,00,00,00,00,48,00,00,00,00,00,00,00,$windowspath-partbytes$,00,00,00,00,00,00,00,00,$windows-diskbytes$,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
 
 [BCD00000001\Objects\{$windows-loader-guid$}\Elements\12000002]
 "Element"="\Windows\system32\winload.efi"
@@ -68,10 +59,7 @@ Windows Registry Editor Version 5.00
 "Element"="$locale$"
 
 [BCD00000001\Objects\{$windows-loader-guid$}\Elements\14000006]
-"Element"=hex(7):7b,00,36,00,65,00,66,00,62,00,35,00,32,00,62,00,66,00,2d,00,\
-  31,00,37,00,36,00,36,00,2d,00,34,00,31,00,64,00,62,00,2d,00,61,00,36,00,62,\
-  00,33,00,2d,00,30,00,65,00,65,00,35,00,65,00,66,00,66,00,37,00,32,00,62,00,\
-  64,00,37,00,7d,00,00,00,00,00
+"Element"=hex(7):7b,00,36,00,65,00,66,00,62,00,35,00,32,00,62,00,66,00,2d,00,31,00,37,00,36,00,36,00,2d,00,34,00,31,00,64,00,62,00,2d,00,61,00,36,00,62,00,33,00,2d,00,30,00,65,00,65,00,35,00,65,00,66,00,66,00,37,00,32,00,62,00,64,00,37,00,7d,00,00,00,00,00
 
 [BCD00000001\Objects\{$windows-loader-guid$}\Elements\16000060]
 "Element"=hex(3):01
@@ -80,9 +68,7 @@ Windows Registry Editor Version 5.00
 "Element"=hex(3):75,00,00,15,00,00,00,00
 
 [BCD00000001\Objects\{$windows-loader-guid$}\Elements\21000001]
-"Element"=hex(3):00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,06,00,00,00,\
-  00,00,00,00,48,00,00,00,00,00,00,00,$windowspath-partbytes$,00,00,00,00,00,\
-  00,00,00,$windows-diskbytes$,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
+"Element"=hex(3):00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,06,00,00,00,00,00,00,00,48,00,00,00,00,00,00,00,$windowspath-partbytes$,00,00,00,00,00,00,00,00,$windows-diskbytes$,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
 
 [BCD00000001\Objects\{$windows-loader-guid$}\Elements\22000002]
 "Element"="\Windows"
@@ -105,15 +91,10 @@ Windows Registry Editor Version 5.00
 [BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements]
 
 [BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\11000001]
-"Element"=hex(3):00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,06,00,00,00,\
-  00,00,00,00,48,00,00,00,00,00,00,00,$bootpath-partbytes$,00,00,00,00,00,\
-  00,00,00,$windows-diskbytes$,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
+"Element"=hex(3):00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,06,00,00,00,00,00,00,00,48,00,00,00,00,00,00,00,$bootpath-partbytes$,00,00,00,00,00,00,00,00,$windows-diskbytes$,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
 
 [BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\12000002]
-"Element"="\\EFI\Microsoft\Boot\\bootmgfw.efi"
-
-[BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\12000004]
-"Element"="Windows Boot Manager"
+"Element"="\\EFI\\MICROSOFT\\BOOT\\BOOTMGFW.EFI"
 
 [BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\12000005]
 "Element"="$locale$"
@@ -151,12 +132,10 @@ Windows Registry Editor Version 5.00
 [BCD00000001\Objects\{b2721d73-1db4-4c62-bf78-c548a880142d}\Elements]
 
 [BCD00000001\Objects\{b2721d73-1db4-4c62-bf78-c548a880142d}\Elements\11000001]
-"Element"=hex(3):00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,06,00,00,00,\
-  00,00,00,00,48,00,00,00,00,00,00,00,$bootpath-partbytes$,00,00,00,00,00,\
-  00,00,00,$windows-diskbytes$,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
+"Element"=hex(3):00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,06,00,00,00,00,00,00,00,48,00,00,00,00,00,00,00,$bootpath-partbytes$,00,00,00,00,00,00,00,00,$windows-diskbytes$,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
 
 [BCD00000001\Objects\{b2721d73-1db4-4c62-bf78-c548a880142d}\Elements\12000002]
-"Element"="\EFI\Microsoft\Boot\memtest.efi"
+"Element"="\\EFI\\Microsoft\\Boot\\memtest.efi"
 
 [BCD00000001\Objects\{b2721d73-1db4-4c62-bf78-c548a880142d}\Elements\12000004]
 "Element"="Windows Memory Diagnostic"
