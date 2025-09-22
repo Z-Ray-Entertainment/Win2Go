@@ -1,5 +1,8 @@
 Windows Registry Editor Version 5.00
 
+[BCD00000001\Objects]
+"System"=dword:00000001
+
 ### Windows Resume Loader Entry ###
 [BCD00000001\Objects\{$windows-resume-guid$}]
 

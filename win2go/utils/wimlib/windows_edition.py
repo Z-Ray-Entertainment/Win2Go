@@ -59,4 +59,4 @@ class WindowsEdition:
         self.service_pack_build = service_pack_build
         self.service_pack_level = service_pack_level
         self.flags = flags
-        self.wimboot_compatible = wimboot_compatible
+        self.wimboot_compatible = wimboot_compatible# TODO: Mount loop_path into sandbox to get rid of --filesystem=/run/media/

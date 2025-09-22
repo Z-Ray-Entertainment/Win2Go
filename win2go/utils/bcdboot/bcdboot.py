@@ -2,9 +2,11 @@ import os
 import shutil
 
 from win2go.const import SHARE_DIR
-from win2go.utils.bcdboot import hivex, boot_reg
+from win2go.utils.bcdboot import hivex, registry_patcher
 
-async def create_bootloader(boot_mount_path: str, windows_mount_path: str, disk_guid: str, boot_guid: str, win_guid: str):
+
+async def create_bootloader(boot_mount_path: str, windows_mount_path: str, disk_guid: str, boot_guid: str,
+                            win_guid: str):
     print("Creating bootloader...")
     if boot_mount_path != "" and windows_mount_path != "":
         _copy_bootmgr(boot_mount_path, windows_mount_path)
@@ -33,21 +35,41 @@ def _copy_bootmgr(boot_mount_path: str, windows_mount_path: str):
 def _build_bcd_store(boot_mount_path: str, disk_guid: str, boot_guid: str, win_guid: str):
     print("Setup BCD...")
 
-    bcd_path = _copy_bcd(boot_mount_path)
-
     boot_reg_src = "{share}/win2go/bcd/boot.reg".format(share=SHARE_DIR)
     boot_reg_dst = "{boot}/boot.reg".format(boot=boot_mount_path)
     shutil.copy(boot_reg_src, boot_reg_dst)
-    boot_reg.patch_boot_reg(boot_reg_dst, win_guid, boot_guid, disk_guid)
-    hivex.merge_bcd_with_reg(bcd_path, boot_reg_dst)
+    registry_patcher.patch_boot_reg(boot_reg_dst, win_guid, boot_guid, disk_guid)
+
+    boot_bcd_path = _copy_boot_bcd(boot_mount_path)
+    hivex.merge_bcd_with_reg(boot_bcd_path, boot_reg_dst)
+
+    recovery_reg_src = "{share}/win2go/bcd/recovery.reg".format(share=SHARE_DIR)
+    recovery_reg_dst = "{boot}/recovery.reg".format(boot=boot_mount_path)
+    shutil.copy(recovery_reg_src, recovery_reg_dst)
+    registry_patcher.patch_recovery_registry(recovery_reg_dst, disk_guid, boot_guid)
+
+    recovery_bcd_path = _copy_recovery_bcd(boot_mount_path)
+    hivex.merge_bcd_with_reg(recovery_bcd_path, recovery_reg_dst)
 
     print("Done building bcd store")
 
-def _copy_bcd(boot_mount_path: str) -> str:
-    print("Copying BCD...")
 
-    bsc_src = "{share}/win2go/bcd/BCD".format(share=SHARE_DIR)
+def _copy_boot_bcd(boot_mount_path: str) -> str:
+    print("Copying Boot BCD...")
+
+    bsc_src = "{share}/win2go/bcd/BCD-PLAIN".format(share=SHARE_DIR)
     bcd_dst = "{boot}/EFI/Microsoft/Boot/BCD".format(boot=boot_mount_path)
+    shutil.copy(bsc_src, bcd_dst)
+
+    print("BCD created at {}".format(bcd_dst))
+    return bcd_dst
+
+
+def _copy_recovery_bcd(boot_mount_path: str) -> str:
+    print("Copying Recovery BCD...")
+
+    bsc_src = "{share}/win2go/bcd/BCD-PLAIN".format(share=SHARE_DIR)
+    bcd_dst = "{boot}/EFI/Microsoft/Recovery/BCD".format(boot=boot_mount_path)
     shutil.copy(bsc_src, bcd_dst)
 
     print("BCD created at {}".format(bcd_dst))

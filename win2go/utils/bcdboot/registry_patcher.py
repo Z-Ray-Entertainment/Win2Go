@@ -36,6 +36,7 @@ def patch_boot_reg(boot_reg_path: str, windows_partition_guid: str, boot_partiti
 
         file_data = re.sub(WINDOWS_EDITION_DISPLAY_NAME, windows_edition, file_data)
 
+        # 7b,00,36,00,62,00,36,00,34,00,64,00,33,00,63,00,39,00,2d,00,61,00,35,00,30,00,38,00,2d,00,31,00,31,00,65,00,62,00,2d,00,38,00,33,00,35,00,32,00,2d,00,66,00,34,00,33,00,38,00,63,00,63,00,61,00,65,00,63,00,63,00,37,00,63,00,7d,00,00,00,00,00
         file_data = re.sub(WINDOWS_LOADER_GUID_HEX, _hexdump(str(win_loader_guid)), file_data)
 
         file_data = re.sub(COMMENTS, "", file_data)
@@ -43,6 +44,21 @@ def patch_boot_reg(boot_reg_path: str, windows_partition_guid: str, boot_partiti
         boot_reg.seek(0)
         boot_reg.write(file_data)
         boot_reg.truncate()
+
+def patch_recovery_registry(recovery_reg_path: str, disk_guid: str, boot_partition_guid: str, locale: str = "en-US"):
+    with open(recovery_reg_path, "r+") as recovery_reg:
+        file_data = recovery_reg.read()
+        file_data = re.sub(LOCALE, locale, file_data)
+
+        raped_boot_guid = _rape_guid(boot_partition_guid)
+        raped_disk_guid = _rape_guid(disk_guid)
+
+        file_data = re.sub(BOOT_PATH_PART_BYTES, str(raped_boot_guid), file_data)
+        file_data = re.sub(WINDOWS_DISK_BYTES, raped_disk_guid, file_data)
+
+        recovery_reg.seek(0)
+        recovery_reg.write(file_data)
+        recovery_reg.truncate()
 
 def _rape_guid(guid: str) -> str:
     raped_guid = ""

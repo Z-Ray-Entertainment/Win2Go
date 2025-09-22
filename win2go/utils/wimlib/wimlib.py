@@ -5,10 +5,6 @@ from win2go.utils.wimlib.wim_info import WIMInfo
 from win2go.utils.wimlib.windows_edition import WindowsEdition
 
 
-def create_windows(device_name, image_index, iso_file):
-    pass
-
-
 def get_wim_info(iso_mount_path: str) -> WIMInfo:
     return build_wiminfo(
         parse_image_definitions(
@@ -118,7 +114,9 @@ def build_wiminfo(wim_dict: dict) -> WIMInfo:
     size_split = wim_header["Size"].split(" ")
     size = int(size_split[0])
     attributes = wim_header["Attributes"]
-    return WIMInfo(path, guid, version, img_count, compression, chunk_size, part_number, size, boot_index, attributes, images)
+    return WIMInfo(path, guid, version, img_count, compression, chunk_size, part_number, size, boot_index, attributes,
+                   images)
+
 
 async def apply_windows_edition(mount_path: str, wiminfo: WIMInfo, windows_edition: WindowsEdition):
     wim_image_path = wiminfo.path
