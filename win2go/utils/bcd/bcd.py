@@ -2,7 +2,7 @@ import os
 import shutil
 
 from win2go.const import SHARE_DIR
-from win2go.utils.bcdboot import hivex, registry_patcher
+from win2go.utils.bcd import hivex, registry_patcher
 
 
 async def create_bootloader(boot_mount_path: str, windows_mount_path: str, disk_guid: str, boot_guid: str,
@@ -17,6 +17,9 @@ async def create_bootloader(boot_mount_path: str, windows_mount_path: str, disk_
 
 def _copy_bootmgr(boot_mount_path: str, windows_mount_path: str):
     print("Copying bootmgr...")
+
+    recovery_dst = "{bootmnt}/EFI/Microsoft/Recovery".format(bootmnt=boot_mount_path)
+    os.makedirs(recovery_dst, exist_ok=True)
 
     efi_src = "{winmnt}/Windows/Boot/EFI".format(winmnt=windows_mount_path)
     boot_dst = "{bootmnt}/EFI/Microsoft/Boot".format(bootmnt=boot_mount_path)

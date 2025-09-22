@@ -7,7 +7,7 @@ import gi
 from win2go import const
 from win2go.ui.block_device_item import get_list_store_expression, build_block_device_model
 from win2go.ui.windows_edition_item import get_edition_list_store_expression, build_windows_edition_model
-from win2go.utils.bcdboot import bcdboot
+from win2go.utils.bcd import bcd
 from win2go.utils.udisks2.drive import Drive
 from win2go.utils.udisks2.loop_device import LoopDevice
 from win2go.utils.udisks2 import udisks2
@@ -250,4 +250,4 @@ class MainWindow(Gtk.ApplicationWindow):
         win_guid: str = self.entry_windows_guid.get_text()
         disk_guid: str = self.entry_disk_guid.get_text()
         _loop = asyncio.new_event_loop()
-        _loop.run_until_complete(bcdboot.create_bootloader(boot_mount, windows_mount, disk_guid, boot_guid, win_guid))
+        _loop.run_until_complete(bcd.create_bootloader(boot_mount, windows_mount, disk_guid, boot_guid, win_guid))
