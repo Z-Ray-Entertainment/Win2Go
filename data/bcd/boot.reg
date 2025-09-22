@@ -15,7 +15,7 @@ Windows Registry Editor Version 5.00
 "Element"=hex(3):00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,06,00,00,00,00,00,00,00,48,00,00,00,00,00,00,00,$windowspath-partbytes$,00,00,00,00,00,00,00,00,$windows-diskbytes$,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
 
 [BCD00000001\Objects\{$windows-resume-guid$}\Elements\12000002]
-"Element"="\Windows\system32\winresume.efi"
+"Element"="\\WINDOWS\\system32\\winresume.efi"
 
 [BCD00000001\Objects\{$windows-resume-guid$}\Elements\12000004]
 "Element"="Windows Resume Application"
@@ -36,7 +36,7 @@ Windows Registry Editor Version 5.00
 "Element"=hex(3):00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,06,00,00,00,00,00,00,00,48,00,00,00,00,00,00,00,$windowspath-partbytes$,00,00,00,00,00,00,00,00,$windows-diskbytes$,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
 
 [BCD00000001\Objects\{$windows-resume-guid$}\Elements\22000002]
-"Element"="\hiberfil.sys"
+"Element"="\\hiberfil.sys"
 
 [BCD00000001\Objects\{$windows-resume-guid$}\Elements\25000008]
 "Element"=hex(3):01,00,00,00,00,00,00,00
@@ -53,7 +53,7 @@ Windows Registry Editor Version 5.00
 "Element"=hex(3):00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,06,00,00,00,00,00,00,00,48,00,00,00,00,00,00,00,$windowspath-partbytes$,00,00,00,00,00,00,00,00,$windows-diskbytes$,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
 
 [BCD00000001\Objects\{$windows-loader-guid$}\Elements\12000002]
-"Element"="\Windows\system32\winload.efi"
+"Element"="\\WINDOWS\\system32\\winload.efi"
 
 [BCD00000001\Objects\{$windows-loader-guid$}\Elements\12000004]
 "Element"="$windows-edition-display-name$"
@@ -74,7 +74,7 @@ Windows Registry Editor Version 5.00
 "Element"=hex(3):00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,06,00,00,00,00,00,00,00,48,00,00,00,00,00,00,00,$windowspath-partbytes$,00,00,00,00,00,00,00,00,$windows-diskbytes$,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
 
 [BCD00000001\Objects\{$windows-loader-guid$}\Elements\22000002]
-"Element"="\Windows"
+"Element"="\\WINDOWS"
 
 [BCD00000001\Objects\{$windows-loader-guid$}\Elements\23000003]
 "Element"="{$windows-resume-guid$}"
