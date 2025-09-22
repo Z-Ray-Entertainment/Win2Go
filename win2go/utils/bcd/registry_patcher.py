@@ -27,16 +27,23 @@ def patch_boot_reg(boot_reg_path: str, windows_partition_guid: str, boot_partiti
         file_data = re.sub(WINDOWS_LOADER_GUID, str(win_loader_guid), file_data)
         file_data = re.sub(LOCALE, locale, file_data)
 
-        raped_win_guid = _rape_guid(windows_partition_guid)
-        raped_boot_guid = _rape_guid(boot_partition_guid)
-        raped_disk_guid = _rape_guid(disk_guid)
-        file_data = re.sub(WINDOWS_PATH_PART_BYTES, str(raped_win_guid), file_data)
-        file_data = re.sub(BOOT_PATH_PART_BYTES, str(raped_boot_guid), file_data)
-        file_data = re.sub(WINDOWS_DISK_BYTES, raped_disk_guid, file_data)
+        windows_partiton_uuid: uuid.UUID = uuid.UUID(windows_partition_guid)
+        boot_partiton_uuid: uuid.UUID = uuid.UUID(boot_partition_guid)
+
+        # b = guid.encode("utf-8") + b"\x00\x00"
+
+        dotnet_win_guid = _dotnet_guid(windows_partition_guid)
+        print("Raped WIN GUID: {}".format(dotnet_win_guid))
+        print("UUID WIN GUID: {}".format(windows_partiton_uuid.bytes))
+
+        dotnet_boot_guid = _dotnet_guid(boot_partition_guid)
+        dotnet_disk_guid = _dotnet_guid(disk_guid)
+        file_data = re.sub(WINDOWS_PATH_PART_BYTES, str(dotnet_win_guid), file_data)
+        file_data = re.sub(BOOT_PATH_PART_BYTES, str(dotnet_boot_guid), file_data)
+        file_data = re.sub(WINDOWS_DISK_BYTES, dotnet_disk_guid, file_data)
 
         file_data = re.sub(WINDOWS_EDITION_DISPLAY_NAME, windows_edition, file_data)
 
-        # 7b,00,36,00,62,00,36,00,34,00,64,00,33,00,63,00,39,00,2d,00,61,00,35,00,30,00,38,00,2d,00,31,00,31,00,65,00,62,00,2d,00,38,00,33,00,35,00,32,00,2d,00,66,00,34,00,33,00,38,00,63,00,63,00,61,00,65,00,63,00,63,00,37,00,63,00,7d,00,00,00,00,00
         file_data = re.sub(WINDOWS_LOADER_GUID_HEX, _hexdump(str(win_loader_guid)), file_data)
 
         file_data = re.sub(COMMENTS, "", file_data)
@@ -50,28 +57,29 @@ def patch_recovery_registry(recovery_reg_path: str, disk_guid: str, boot_partiti
         file_data = recovery_reg.read()
         file_data = re.sub(LOCALE, locale, file_data)
 
-        raped_boot_guid = _rape_guid(boot_partition_guid)
-        raped_disk_guid = _rape_guid(disk_guid)
+        dotnet_boot_guid = _dotnet_guid(boot_partition_guid)
+        dotnet_disk_guid = _dotnet_guid(disk_guid)
 
-        file_data = re.sub(BOOT_PATH_PART_BYTES, str(raped_boot_guid), file_data)
-        file_data = re.sub(WINDOWS_DISK_BYTES, raped_disk_guid, file_data)
+        file_data = re.sub(BOOT_PATH_PART_BYTES, str(dotnet_boot_guid), file_data)
+        file_data = re.sub(WINDOWS_DISK_BYTES, dotnet_disk_guid, file_data)
 
         recovery_reg.seek(0)
         recovery_reg.write(file_data)
         recovery_reg.truncate()
 
-def _rape_guid(guid: str) -> str:
-    raped_guid = ""
+# Int32, Int16, Int16, Bytes[] see: https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-9.0&redirectedfrom=MSDN#system-guid-ctor(system-int32-system-int16-system-int16-system-byte())
+def _dotnet_guid(guid: str) -> str:
+    dotnet_guid = ""
     groups = guid.split("-")
-    raped_guid += _reverse_group(groups[0])
-    raped_guid += _reverse_group(groups[1])
-    raped_guid += _reverse_group(groups[2])
-    raped_guid += groups[3]
-    raped_guid += groups[4]
+    dotnet_guid += _reverse_group(groups[0])
+    dotnet_guid += _reverse_group(groups[1])
+    dotnet_guid += _reverse_group(groups[2])
+    dotnet_guid += groups[3]
+    dotnet_guid += groups[4]
 
-    raped_guid = _split_guid_by_delimiter(raped_guid)
+    dotnet_guid = _separate_pairs_by_delimiter(dotnet_guid)
 
-    return raped_guid
+    return dotnet_guid
 
 
 def _reverse_group(group: str) -> str:
@@ -84,7 +92,7 @@ def _reverse_group(group: str) -> str:
 
     return reversed_group
 
-def _split_guid_by_delimiter(guid: str):
+def _separate_pairs_by_delimiter(guid: str):
     split_guid: str = ""
     for i in range(0, len(guid), 2):
         split_guid += guid[i:i+2] + ","
