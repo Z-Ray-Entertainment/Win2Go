@@ -1,6 +1,6 @@
 Windows Registry Editor Version 5.00
 
-[BCD00000001\Objects]
+[BCD00000001\Description]
 "System"=dword:00000001
 
 ### Windows Resume Loader Entry ###
