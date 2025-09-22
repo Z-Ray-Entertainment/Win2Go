@@ -1,0 +1,64 @@
+# GUIDS
+
+DISK GUID:
+0C3E6943-4D18-4B94-8AAE-57727725F82A
+
+BOOT GUID:
+2FB5A535-8EC3-4CE8-84A1-1F642BB4C41E
+
+BOOT MOUNT:
+/run/media/vortexacherontic/BOOT/
+
+WINDOWS GUID:
+BEF2AFB5-766F-4BD6-B4F8-40992645652B
+
+WINDOWS MOUNT:
+/run/media/vortexacherontic/WINDOWS/
+
+# REGISTRY COMPARE
+
+## Win10:
+{2a0e64e0-688e-11eb-a5d9-806e6f6e6963}
+{34bdcc03-8a56-11f0-b1d6-806e6f6e6963}
+{3e3fb19a-5d48-11ef-aed9-806e6f6e6963}
+{5741e816-2f05-11ea-a38c-e0d55ea0c0fe}
+{5741e817-2f05-11ea-a38c-e0d55ea0c0fe}
+
+windows-resume-guid:
+###{6b64d3c8-a508-11eb-8352-f438ccaecc7c}
+14000008
+16000009
+26000006
+
+windows-loader-guid:
+###{6b64d3c9-a508-11eb-8352-f438ccaecc7c}
+14000008
+15000066
+16000009
+
+{6b64d3ca-a508-11eb-8352-f438ccaecc7c}
+{6b64d3cb-a508-11eb-8352-f438ccaecc7c}
+
+
+
+{a5a30fa2-3d06-4e9f-b5f4-a01df9d1fcba}
+
+{e2abecb5-5c83-11ef-aed6-806e6f6e6963}
+{e2abecb7-5c83-11ef-aed6-806e6f6e6963}
+{e2abecb8-5c83-11ef-aed6-806e6f6e6963}
+{e2abecb9-5c83-11ef-aed6-806e6f6e6963}
+{e2abecba-5c83-11ef-aed6-806e6f6e6963}
+
+windows-loader-guid-as-hex:
+7b,00,36,00,62,00,36,00,34,00,64,00,33,00,63,00,39,00,2d,00,61,00,35,00,30,00,38,00,2d,00,31,00,31,00,65,00,62,00,2d,00,38,00,33,00,35,00,32,00,2d,00,66,00,34,00,33,00,38,00,63,00,63,00,61,00,65,00,63,00,63,00,37,00,63,00,7d,00,00,00,00,00
+
+
+## Win2Go:
+windows-resume-guid:
+###{43b238db-9fc4-4677-97b7-8b1f1097ac23}
+
+windows-loader-guid:
+###{d26cc9a0-ee0e-4759-bf75-6271186ad727}
+
+windows-loader-guid-as-hex:
+33,00,33,00,65,00,66,00,33,00,37,00,39,00,66,00,2d,00,30,00,35,00,64,00,32,00,2d,00,34,00,30,00,64,00,33,00,2d,00,39,00,61,00,31,00,66,00,2d,00,36,00,61,00,30,00,66,00,33,00,62,00,35,00,36,00,65,00,61,00,31,00,34,00,00,00,00,00
