@@ -90,6 +90,7 @@ Windows Registry Editor Version 5.00
 
 [BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Description]
 "Type"=dword:10100002
+"FirmwareVariable"=hex(3):01,00,00,00,50,01,00,00,$wbmoptbytes$,05,00,00,00,a4,00,00,00,d0,00,00,00,88,00,00,00,$wbmoptdata$,57,00,69,00,6e,00,64,00,6f,00,77,00,73,00,20,00,42,00,6f,00,6f,00,74,00,20,00,4d,00,61,00,6e,00,61,00,67,00,65,00,72,00,00,00,00,00,01,00,00,00,80,00,00,00,04,00,00,00,$wbmdevice$
 
 [BCD00000001\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements]
 
